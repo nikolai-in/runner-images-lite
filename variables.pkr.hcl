@@ -10,15 +10,7 @@ locals {
 variable "template" {
   type        = string
   default     = "desktop"
-  description = "Template type, can be desktop or core"
-  validation {
-    condition     = (var.template == "desktop") || (var.template == "core")
-    error_message = "Should be desktop or core."
-  }
-}
-
-variable "image_index" {
-  type = map(string)
+  description = "Template name for identification purposes"
 }
 
 variable "proxmox_url" {

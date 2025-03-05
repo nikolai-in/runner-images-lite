@@ -1,11 +1,3 @@
-# Image index
-# 1 = Windows 10 IoT Enterprise LTSC
-# 2 = Windows 10 IoT Enterprise LTSC with Desktop Experience
-image_index = {
-  "core"    = 1
-  "desktop" = 2
-}
-
 node        = "pve"
 proxmox_url = "https://172.16.50.11:8006/api2/json"
 

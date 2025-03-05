@@ -41,7 +41,7 @@ source "proxmox-iso" "windows10iot" {
   additional_iso_files {
     cd_files = ["./build_files/drivers/*", "./build_files/scripts/ConfigureRemotingForAnsible.ps1", "./build_files/software/virtio-win-guest-tools.exe"]
     cd_content = {
-      "autounattend.xml" = templatefile("./build_files/templates/unattend.pkrtpl", { password = local.winrm_password, cdrom_drive = var.cdrom_drive, index = lookup(var.image_index, var.template, "core") })
+      "autounattend.xml" = templatefile("./build_files/templates/unattend.pkrtpl", { password = local.winrm_password, cdrom_drive = var.cdrom_drive, index = 1 })
     }
     cd_label         = "Unattend"
     iso_storage_pool = var.iso_storage
