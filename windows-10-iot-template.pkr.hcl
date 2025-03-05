@@ -14,11 +14,11 @@ packer {
 
 source "proxmox-iso" "windows10iot" {
 
-  # Proxmox Host Conection
+  # Proxmox Host Connection
   proxmox_url              = var.proxmox_url
   insecure_skip_tls_verify = true
-  username                 = local.proxmox_user
-  password                 = local.proxmox_password
+  username                 = var.proxmox_user
+  password                 = var.proxmox_password
   node                     = var.node
 
   # BIOS - UEFI
@@ -34,19 +34,23 @@ source "proxmox-iso" "windows10iot" {
     efi_type          = "4m"
   }
 
-  # Windows ISO File
-  iso_file    = var.windows_iso
-  unmount_iso = true
+  # Windows ISO File - Updated to use boot_iso block
+  boot_iso {
+    iso_file    = var.windows_iso
+    iso_storage = var.iso_storage
+    unmount_iso = true
+  }
 
   additional_iso_files {
     cd_files = ["./build_files/drivers/*", "./build_files/scripts/ConfigureRemotingForAnsible.ps1", "./build_files/software/virtio-win-guest-tools.exe"]
     cd_content = {
-      "autounattend.xml" = templatefile("./build_files/templates/unattend.pkrtpl", { password = local.winrm_password, cdrom_drive = var.cdrom_drive, index = 1 })
+      "autounattend.xml" = templatefile("./build_files/templates/unattend.pkrtpl", { password = var.winrm_password, cdrom_drive = var.cdrom_drive, index = 1 })
     }
     cd_label         = "Unattend"
     iso_storage_pool = var.iso_storage
     unmount          = true
-    device           = "sata0"
+    type             = "sata"
+    index            = 0
   }
 
   template_name           = "templ-win10iot-${var.template}"
@@ -81,7 +85,7 @@ source "proxmox-iso" "windows10iot" {
   # WinRM
   communicator   = "winrm"
   winrm_username = var.winrm_user
-  winrm_password = local.winrm_password
+  winrm_password = var.winrm_password
   winrm_timeout  = "12h"
   winrm_port     = "5986"
   winrm_use_ssl  = true
