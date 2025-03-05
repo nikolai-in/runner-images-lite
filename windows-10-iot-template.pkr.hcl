@@ -1,7 +1,7 @@
 packer {
   required_plugins {
     windows-update = {
-      version = "0.14.3"
+      version = "~> 0.14.3"
       source  = "github.com/rgl/windows-update"
     }
     proxmox = {
@@ -27,6 +27,7 @@ source "proxmox-iso" "windows10iot" {
   # Machine type
   # Q35 less resource overhead and newer chipset
   machine = "q35"
+  boot    = "order=ide2;scsi0"
 
   efi_config {
     efi_storage_pool  = var.efi_storage
@@ -36,9 +37,8 @@ source "proxmox-iso" "windows10iot" {
 
   # Windows ISO File - Updated to use boot_iso block
   boot_iso {
-    iso_file    = var.windows_iso
-    iso_storage = var.iso_storage
-    unmount_iso = true
+    iso_file = var.windows_iso
+    unmount  = true
   }
 
   additional_iso_files {
@@ -92,9 +92,9 @@ source "proxmox-iso" "windows10iot" {
   winrm_insecure = true
 
   # Boot
-  boot_wait = "7s"
+  boot_wait = "4s"
   boot_command = [
-    "<enter>"
+    "<enter><wait><enter>"
   ]
 
 }
