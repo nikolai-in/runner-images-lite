@@ -75,26 +75,25 @@ source "proxmox-iso" "windows2019" {
   # Storage
   disks {
     storage_pool = var.disk_storage
-    # storage_pool_type = "btrfs"
-    type       = "scsi"
-    disk_size  = var.disk_size_gb
-    cache_mode = "writeback"
-    format     = "raw"
+    type         = "scsi"
+    disk_size    = var.disk_size_gb
+    cache_mode   = "writeback"
+    format       = "raw"
   }
 
   # WinRM
   communicator   = "winrm"
   winrm_username = var.winrm_user
   winrm_password = local.winrm_password
-  winrm_timeout  = "12h"
+  winrm_timeout  = "90m"
   winrm_port     = "5986"
   winrm_use_ssl  = true
   winrm_insecure = true
 
   # Boot
-  boot_wait = "7s"
+  boot_wait = "3s"
   boot_command = [
-    "<enter>"
+    "<enter><wait><enter>",
   ]
 
 }
