@@ -91,6 +91,7 @@ source "proxmox-iso" "windows2019" {
   winrm_insecure = true
 
   # Boot
+  boot      = "order=ide2;scsi0"
   boot_wait = "3s"
   boot_command = [
     "<enter><wait><enter>",
