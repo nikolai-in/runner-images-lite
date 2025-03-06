@@ -1,7 +1,7 @@
 packer {
   required_plugins {
     windows-update = {
-      version = "0.14.3"
+      version = "~> 0.16.9"
       source  = "github.com/rgl/windows-update"
     }
     proxmox = {
@@ -12,13 +12,13 @@ packer {
 }
 
 
-source "proxmox-iso" "windows2022" {
+source "proxmox-iso" "windows2019" {
 
   # Proxmox Host Conection
   proxmox_url              = var.proxmox_url
   insecure_skip_tls_verify = true
-  username                 = local.proxmox_user
-  password                 = local.proxmox_password
+  username                 = var.proxmox_user
+  password                 = var.proxmox_password
   node                     = var.node
 
   # BIOS - UEFI
@@ -35,28 +35,32 @@ source "proxmox-iso" "windows2022" {
   }
 
   # Windows Server ISO File
-  iso_file    = var.windows_iso
-  unmount_iso = true
+  boot_iso {
+    iso_file         = var.windows_iso
+    iso_storage_pool = var.iso_storage
+    unmount          = true
+  }
 
   additional_iso_files {
     cd_files = ["./build_files/drivers/*", "./build_files/scripts/ConfigureRemotingForAnsible.ps1", "./build_files/software/virtio-win-guest-tools.exe"]
     cd_content = {
-      "autounattend.xml" = templatefile("./build_files/templates/unattend.pkrtpl", { password = local.winrm_password, cdrom_drive = var.cdrom_drive, index = lookup(var.image_index, var.template, "core") })
+      "autounattend.xml" = templatefile("./build_files/templates/unattend.pkrtpl", { password = var.winrm_password, cdrom_drive = var.cdrom_drive, index = lookup(var.image_index, var.template, "core") })
     }
     cd_label         = "Unattend"
     iso_storage_pool = var.iso_storage
     unmount          = true
-    device           = "sata0"
+    type             = "sata"
+    index            = 0
   }
 
-  template_name           = "templ-win2022-${var.template}"
+  template_name           = "templ-win2019-${var.template}"
   template_description    = "Created on: ${timestamp()}"
-  vm_name                 = "win22-${var.template}"
+  vm_name                 = "win19-${var.template}"
   memory                  = var.memory
   cores                   = var.cores
   sockets                 = var.socket
   cpu_type                = "host"
-  os                      = "win11"
+  os                      = "win10"
   scsi_controller         = "virtio-scsi-pci"
   cloud_init              = false
   cloud_init_storage_pool = var.cloud_init_storage
@@ -71,33 +75,33 @@ source "proxmox-iso" "windows2022" {
   # Storage
   disks {
     storage_pool = var.disk_storage
-    # storage_pool_type = "btrfs"
-    type       = "scsi"
-    disk_size  = var.disk_size_gb
-    cache_mode = "writeback"
-    format     = "raw"
+    type         = "scsi"
+    disk_size    = var.disk_size_gb
+    cache_mode   = "writeback"
+    format       = "raw"
   }
 
   # WinRM
   communicator   = "winrm"
   winrm_username = var.winrm_user
-  winrm_password = local.winrm_password
-  winrm_timeout  = "12h"
+  winrm_password = var.winrm_password
+  winrm_timeout  = "90m"
   winrm_port     = "5986"
   winrm_use_ssl  = true
   winrm_insecure = true
 
   # Boot
-  boot_wait = "7s"
+  boot      = "order=ide2;scsi0"
+  boot_wait = "3s"
   boot_command = [
-    "<enter>"
+    "<enter><wait><enter>",
   ]
 
 }
 
 build {
   name    = "Proxmox Build"
-  sources = ["source.proxmox-iso.windows2022"]
+  sources = ["source.proxmox-iso.windows2019"]
 
   provisioner "windows-restart" {
   }
