@@ -17,8 +17,8 @@ source "proxmox-iso" "windows2019" {
   # Proxmox Host Conection
   proxmox_url              = var.proxmox_url
   insecure_skip_tls_verify = true
-  username                 = local.proxmox_user
-  password                 = local.proxmox_password
+  username                 = var.proxmox_user
+  password                 = var.proxmox_password
   node                     = var.node
 
   # BIOS - UEFI
@@ -84,7 +84,7 @@ source "proxmox-iso" "windows2019" {
   # WinRM
   communicator   = "winrm"
   winrm_username = var.winrm_user
-  winrm_password = local.winrm_password
+  winrm_password = var.winrm_password
   winrm_timeout  = "90m"
   winrm_port     = "5986"
   winrm_use_ssl  = true

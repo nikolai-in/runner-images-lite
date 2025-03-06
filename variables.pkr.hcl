@@ -1,11 +1,21 @@
 # variables
-locals {
-  proxmox_password = vault("kv/data/proxmox", "password")
-  proxmox_user     = vault("kv/data/proxmox", "username")
-  winrm_password   = vault("kv/data/windows", "winrm_password")
-  sensitive        = true
+variable "proxmox_password" {
+  type        = string
+  description = "Proxmox password"
+  sensitive   = true
 }
 
+variable "proxmox_user" {
+  type        = string
+  description = "Proxmox username"
+  sensitive   = true
+}
+
+variable "winrm_password" {
+  type        = string
+  description = "Windows Remote Management password"
+  sensitive   = true
+}
 
 variable "template" {
   type        = string
