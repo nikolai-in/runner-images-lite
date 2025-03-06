@@ -102,7 +102,40 @@ build {
   name    = "Proxmox Build"
   sources = ["source.proxmox-iso.windows10iot"]
 
+  # First restart to make sure we're fully booted
   provisioner "windows-restart" {
+    restart_timeout = "15m"
+  }
+
+  # Enable Administrator account immediately via both methods
+  provisioner "powershell" {
+    inline = [
+      "net user Administrator /active:yes",
+      "Write-Host 'Administrator account enabled via net user command'"
+    ]
+    pause_before = "1m"
+  }
+
+  # Run our dedicated script for enabling Administrator
+  provisioner "powershell" {
+    script = "./build_files/scripts/EnableAdmin.ps1"
+  }
+
+  # Restart to ensure account settings are applied
+  provisioner "windows-restart" {
+    restart_timeout = "15m"
+  }
+
+  # Check if Administrator is enabled before proceeding
+  provisioner "powershell" {
+    inline = [
+      "if ((([ADSI]'WinNT://./Administrator').Properties['UserFlags'].Value -band 0x2) -ne 0) {",
+      "    Write-Host 'ERROR: Administrator account is still disabled!'",
+      "    exit 1",
+      "} else {",
+      "    Write-Host 'SUCCESS: Administrator account is enabled.'",
+      "}"
+    ]
   }
 
   provisioner "windows-update" {
@@ -122,6 +155,14 @@ build {
   provisioner "file" {
     source      = "./build_files/config/"
     destination = "C://Program Files//Cloudbase Solutions//Cloudbase-Init//conf"
+  }
+
+  # Make sure Administrator is still enabled after CloudBase-Init installation
+  provisioner "powershell" {
+    inline = [
+      "net user Administrator /active:yes",
+      "Write-Host 'Administrator account re-enabled'"
+    ]
   }
 
   provisioner "powershell" {
