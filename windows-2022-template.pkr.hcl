@@ -12,7 +12,7 @@ packer {
 }
 
 
-source "proxmox-iso" "windows2022" {
+source "proxmox-iso" "windows2019" {
 
   # Proxmox Host Conection
   proxmox_url              = var.proxmox_url
@@ -49,14 +49,14 @@ source "proxmox-iso" "windows2022" {
     device           = "sata0"
   }
 
-  template_name           = "templ-win2022-${var.template}"
+  template_name           = "templ-win2019-${var.template}"
   template_description    = "Created on: ${timestamp()}"
-  vm_name                 = "win22-${var.template}"
+  vm_name                 = "win19-${var.template}"
   memory                  = var.memory
   cores                   = var.cores
   sockets                 = var.socket
   cpu_type                = "host"
-  os                      = "win11"
+  os                      = "win10"
   scsi_controller         = "virtio-scsi-pci"
   cloud_init              = false
   cloud_init_storage_pool = var.cloud_init_storage
@@ -97,7 +97,7 @@ source "proxmox-iso" "windows2022" {
 
 build {
   name    = "Proxmox Build"
-  sources = ["source.proxmox-iso.windows2022"]
+  sources = ["source.proxmox-iso.windows2019"]
 
   provisioner "windows-restart" {
   }
