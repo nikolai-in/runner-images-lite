@@ -1,7 +1,7 @@
 packer {
   required_plugins {
     windows-update = {
-      version = "0.14.3"
+      version = "~> 0.16.9"
       source  = "github.com/rgl/windows-update"
     }
     proxmox = {
