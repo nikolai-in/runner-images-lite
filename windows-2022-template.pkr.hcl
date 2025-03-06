@@ -35,8 +35,11 @@ source "proxmox-iso" "windows2019" {
   }
 
   # Windows Server ISO File
-  iso_file    = var.windows_iso
-  unmount_iso = true
+  boot_iso {
+    iso_file    = var.windows_iso
+    iso_storage = var.iso_storage
+    unmount_iso = true
+  }
 
   additional_iso_files {
     cd_files = ["./build_files/drivers/*", "./build_files/scripts/ConfigureRemotingForAnsible.ps1", "./build_files/software/virtio-win-guest-tools.exe"]
@@ -46,7 +49,8 @@ source "proxmox-iso" "windows2019" {
     cd_label         = "Unattend"
     iso_storage_pool = var.iso_storage
     unmount          = true
-    device           = "sata0"
+    type             = "sata"
+    index            = 0
   }
 
   template_name           = "templ-win2019-${var.template}"
