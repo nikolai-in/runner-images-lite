@@ -67,11 +67,6 @@ variable "socket" {
   description = "Amount of CPU sockets"
 }
 
-variable "vlan" {
-  type        = number
-  description = "Network VLAN Tag"
-}
-
 variable "bridge" {
   type        = string
   description = "Network bridge name"

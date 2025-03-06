@@ -44,7 +44,7 @@ source "proxmox-iso" "windows10iot" {
   additional_iso_files {
     cd_files = ["./build_files/drivers/*", "./build_files/scripts/ConfigureRemotingForAnsible.ps1", "./build_files/software/virtio-win-guest-tools.exe"]
     cd_content = {
-      "autounattend.xml" = templatefile("./build_files/templates/unattend.pkrtpl", { password = var.winrm_password, cdrom_drive = var.cdrom_drive, index = 1 })
+      "autounattend.xml" = templatefile("./build_files/templates/unattend.pkrtpl", { password = var.winrm_password, cdrom_drive = var.cdrom_drive })
     }
     cd_label         = "Unattend"
     iso_storage_pool = var.iso_storage
@@ -67,9 +67,8 @@ source "proxmox-iso" "windows10iot" {
 
   # Network
   network_adapters {
-    model    = "virtio"
-    bridge   = var.bridge
-    vlan_tag = var.vlan
+    model  = "virtio"
+    bridge = var.bridge
   }
 
   # Storage
@@ -86,7 +85,7 @@ source "proxmox-iso" "windows10iot" {
   communicator   = "winrm"
   winrm_username = var.winrm_user
   winrm_password = var.winrm_password
-  winrm_timeout  = "12h"
+  winrm_timeout  = "1h"
   winrm_port     = "5986"
   winrm_use_ssl  = true
   winrm_insecure = true

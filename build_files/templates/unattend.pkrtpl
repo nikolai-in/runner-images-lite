@@ -23,7 +23,8 @@
             xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <UserData>
                 <ProductKey>
-                    <Key>M7XTF-FN8P6-TTKYV-9D4CC-J462D</Key>
+                    <Key>QPM6N-7J2WJ-P88HH-P3YRH-YY74H</Key>
+                    <WillShowUI>OnError</WillShowUI>
                 </ProductKey>
                 <AcceptEula>true</AcceptEula>
             </UserData>
@@ -71,8 +72,8 @@
                 <OSImage>
                     <InstallFrom>
                         <MetaData wcm:action="add">
-                            <Key>/IMAGE/INDEX</Key>
-                            <Value>${index}</Value>
+                            <Key>/IMAGE/NAME</Key>
+                            <Value>Windows 10 IoT Enterprise LTSC 2021</Value>
                         </MetaData>
                     </InstallFrom>
                     <InstallTo>
@@ -97,6 +98,10 @@
                 <HideLocalAccountScreen>true</HideLocalAccountScreen>
                 <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
                 <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
+                <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
+                <SkipUserOOBE>true</SkipUserOOBE>
+                <SkipMachineOOBE>true</SkipMachineOOBE>
+                <NetworkLocation>Work</NetworkLocation>
             </OOBE>
             <TimeZone>W. Europe Standard Time</TimeZone>
             <FirstLogonCommands>
