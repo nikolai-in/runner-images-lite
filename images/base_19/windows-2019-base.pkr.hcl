@@ -69,7 +69,7 @@ source "proxmox-iso" "windows2019" {
   network_adapters {
     model    = "virtio"
     bridge   = var.bridge
-    vlan_tag = var.vlan
+    vlan_tag = var.vlan >= 1 ? var.vlan : null
   }
 
   # Storage

@@ -78,7 +78,12 @@ variable "socket" {
 
 variable "vlan" {
   type        = number
-  description = "Network VLAN Tag"
+  description = "Network VLAN Tag (optional, set to -1 to disable VLAN tagging)"
+  default     = -1
+  validation {
+    condition     = var.vlan == -1 || (var.vlan >= 1 && var.vlan <= 4094)
+    error_message = "VLAN tag must be -1 (for no tagging) or between 1 and 4094."
+  }
 }
 
 variable "bridge" {
