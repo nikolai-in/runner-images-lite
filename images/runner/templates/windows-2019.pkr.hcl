@@ -202,12 +202,6 @@ build {
   provisioner "powershell" {
     elevated_password = "${var.winrm_password}"
     elevated_user     = "${var.winrm_user}"
-    inline            = ["bcdedit.exe /set TESTSIGNING ON"]
-  }
-
-  provisioner "powershell" {
-    elevated_password = "${var.winrm_password}"
-    elevated_user     = "${var.winrm_user}"
     scripts           = ["${path.root}/../scripts/build/Install-NET48.ps1"]
     valid_exit_codes  = [0, 3010]
   }
