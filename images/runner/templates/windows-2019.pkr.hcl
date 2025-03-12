@@ -1,3 +1,16 @@
+packer {
+  required_plugins {
+    windows-update = {
+      version = "~> 0.16.9"
+      source  = "github.com/rgl/windows-update"
+    }
+    proxmox = {
+      version = "~> 1"
+      source  = "github.com/hashicorp/proxmox"
+    }
+  }
+}
+
 variable "agent_tools_directory" {
   type    = string
   default = "C:\\hostedtoolcache\\windows"
