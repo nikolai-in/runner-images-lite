@@ -180,25 +180,22 @@ build {
   }
 
   provisioner "powershell" {
+    elevated_user     = "${var.winrm_user}"
+    elevated_password = "${var.winrm_password}"
     inline = [
       "Get-Volume | Where-Object { $_.FileSystemLabel -eq 'runner_files' } | ForEach-Object {",
       "  $driveLetter = $_.DriveLetter + ':'",
       "  Copy-Item -Path \"$driveLetter\\*\" -Destination \"${var.image_folder}\\\" -Recurse -Force",
-      "}"
-    ]
-  }
-
-  provisioner "powershell" {
-    inline = [
-      "Move-Item '${var.image_folder}\\assets\\post-gen' 'C:\\post-generation'",
-      "Remove-Item -Recurse '${var.image_folder}\\assets'",
-      "Move-Item '${var.image_folder}\\scripts\\helpers' '${var.helper_script_folder}\\ImageHelpers'",
-      "New-Item -Type Directory -Path '${var.helper_script_folder}\\TestsHelpers\\'",
-      "Move-Item '${var.image_folder}\\scripts\\tests\\Helpers.psm1' '${var.helper_script_folder}\\TestsHelpers\\TestsHelpers.psm1'",
-      "Move-Item '${var.image_folder}\\scripts\\tests' '${var.image_folder}\\tests'",
-      "Remove-Item -Recurse '${var.image_folder}\\scripts'",
-      "Move-Item '${var.image_folder}\\toolsets\\toolset-2019.json' '${var.image_folder}\\toolset.json'",
-      "Remove-Item -Recurse '${var.image_folder}\\toolsets'"
+      "}",
+      "Move-Item '${var.image_folder}\\assets\\post-gen' 'C:\\post-generation' -Force",
+      "Remove-Item -Recurse '${var.image_folder}\\assets' -Force",
+      "Move-Item '${var.image_folder}\\scripts\\helpers' '${var.helper_script_folder}\\ImageHelpers' -Force",
+      "New-Item -Type Directory -Path '${var.helper_script_folder}\\TestsHelpers\\' -Force",
+      "Move-Item '${var.image_folder}\\scripts\\tests\\Helpers.psm1' '${var.helper_script_folder}\\TestsHelpers\\TestsHelpers.psm1' -Force",
+      "Move-Item '${var.image_folder}\\scripts\\tests' '${var.image_folder}\\tests' -Force",
+      "Remove-Item -Recurse '${var.image_folder}\\scripts' -Force",
+      "Move-Item '${var.image_folder}\\toolsets\\toolset-2019.json' '${var.image_folder}\\toolset.json' -Force",
+      "Remove-Item -Recurse '${var.image_folder}\\toolsets' -Force"
     ]
   }
 
