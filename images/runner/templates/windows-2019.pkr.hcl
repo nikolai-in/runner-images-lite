@@ -41,20 +41,65 @@ variable "temp_dir" {
   default = "C:\\temp"
 }
 
-variable "install_password" {
+variable "winrm_password" {
   type      = string
-  default   = ""
+  default   = "Administrator"
   sensitive = true
 }
 
-variable "install_user" {
+variable "winrm_user" {
   type    = string
-  default = "installer"
+  default = "Administrator"
 }
 
 variable "helper_script_folder" {
   type    = string
   default = "C:\\Program Files\\WindowsPowerShell\\Modules\\"
+}
+
+variable "proxmox_url" {
+  type        = string
+  description = "Proxmox Server URL"
+}
+
+variable "proxmox_password" {
+  type        = string
+  description = "Proxmox password"
+  sensitive   = true
+}
+
+variable "proxmox_user" {
+  type        = string
+  description = "Proxmox username"
+  sensitive   = true
+}
+
+variable "node" {
+  type        = string
+  description = "Proxmox cluster node"
+}
+
+source "proxmox-clone" "windows2019" {
+  clone_vm             = "templ-win2019-desktop"
+  cloud_init           = true
+  template_name        = "runner-win2019-${formatdate("YYYY-MM-DD", timestamp())}"
+  template_description = "Created on: ${timestamp()}"
+  full_clone           = false
+
+  # Proxmox Host Conection
+  proxmox_url              = var.proxmox_url
+  insecure_skip_tls_verify = true
+  username                 = var.proxmox_user
+  password                 = var.proxmox_password
+  node                     = var.node
+
+  communicator   = "winrm"
+  winrm_username = var.winrm_user
+  winrm_password = var.winrm_password
+  winrm_timeout  = "90m"
+  winrm_port     = "5986"
+  winrm_use_ssl  = true
+  winrm_insecure = true
 }
 
 build {
@@ -96,26 +141,26 @@ build {
 
   provisioner "windows-shell" {
     inline = [
-      "net user ${var.install_user} ${var.install_password} /add /passwordchg:no /passwordreq:yes /active:yes /Y",
-      "net localgroup Administrators ${var.install_user} /add",
+      "net user ${var.winrm_user} ${var.winrm_password} /add /passwordchg:no /passwordreq:yes /active:yes /Y",
+      "net localgroup Administrators ${var.winrm_user} /add",
       "winrm set winrm/config/service/auth @{Basic=\"true\"}",
       "winrm get winrm/config/service/auth"
     ]
   }
 
   provisioner "powershell" {
-    inline = ["if (-not ((net localgroup Administrators) -contains '${var.install_user}')) { exit 1 }"]
+    inline = ["if (-not ((net localgroup Administrators) -contains '${var.winrm_user}')) { exit 1 }"]
   }
 
   provisioner "powershell" {
-    elevated_password = "${var.install_password}"
-    elevated_user     = "${var.install_user}"
+    elevated_password = "${var.winrm_password}"
+    elevated_user     = "${var.winrm_user}"
     inline            = ["bcdedit.exe /set TESTSIGNING ON"]
   }
 
   provisioner "powershell" {
-    elevated_password = "${var.install_password}"
-    elevated_user     = "${var.install_user}"
+    elevated_password = "${var.winrm_password}"
+    elevated_user     = "${var.winrm_user}"
     scripts           = ["${path.root}/../scripts/build/Install-NET48.ps1"]
     valid_exit_codes  = [0, 3010]
   }
@@ -167,8 +212,8 @@ build {
   }
 
   provisioner "powershell" {
-    elevated_password = "${var.install_password}"
-    elevated_user     = "${var.install_user}"
+    elevated_password = "${var.winrm_password}"
+    elevated_user     = "${var.winrm_user}"
     environment_vars  = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     scripts = [
       "${path.root}/../scripts/build/Install-VisualStudio.ps1",
@@ -268,8 +313,8 @@ build {
   }
 
   provisioner "powershell" {
-    elevated_password = "${var.install_password}"
-    elevated_user     = "${var.install_user}"
+    elevated_password = "${var.winrm_password}"
+    elevated_user     = "${var.winrm_user}"
     scripts           = ["${path.root}/../scripts/build/Install-WindowsUpdates.ps1"]
   }
 
@@ -315,7 +360,7 @@ build {
   }
 
   provisioner "powershell" {
-    environment_vars = ["INSTALL_USER=${var.install_user}"]
+    environment_vars = ["winrm_user=${var.winrm_user}"]
     scripts = [
       "${path.root}/../scripts/build/Install-NativeImages.ps1",
       "${path.root}/../scripts/build/Configure-System.ps1",
