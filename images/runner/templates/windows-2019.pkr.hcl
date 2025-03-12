@@ -103,6 +103,9 @@ source "proxmox-clone" "windows2019" {
 }
 
 build {
+  name    = "Proxmox Build"
+  sources = ["source.proxmox-iso.windows2019"]
+
   provisioner "powershell" {
     inline = [
       "New-Item -Path ${var.image_folder} -ItemType Directory -Force",
