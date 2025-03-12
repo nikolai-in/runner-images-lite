@@ -122,9 +122,9 @@ variable "iso_storage_pool" {
 
 source "proxmox-clone" "windows2019" {
   clone_vm_id          = var.clone_vm_id
-  template_name        = "runner-win2019-${formatdate("YYYY-MM-DD", timestamp())}"
+  template_name        = "runner-win2019-${formatdate("YYYY-MM-DD-HHmm", timestamp())}"
   template_description = "Created on: ${timestamp()}"
-  vm_name              = "building-runner-win2019-${formatdate("YYYY-MM-DD", timestamp())}"
+  vm_name              = "building-runner-win2019-${formatdate("YYYY-MM-DD-HHmm", timestamp())}"
   full_clone           = false
 
   # Proxmox Host Conection
