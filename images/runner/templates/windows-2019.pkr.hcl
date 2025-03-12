@@ -176,6 +176,8 @@ build {
     elevated_user     = "${var.winrm_user}"
     elevated_password = "${var.winrm_password}"
     inline = [
+      "Remove-Item -Path ${var.image_folder} -Recurse -Force -ErrorAction SilentlyContinue",
+      "Remove-Item -Path ${var.temp_dir} -Recurse -Force -ErrorAction SilentlyContinue",
       "New-Item -Path ${var.image_folder} -ItemType Directory -Force",
       "New-Item -Path ${var.temp_dir} -ItemType Directory -Force",
       "$acl = Get-Acl -Path ${var.temp_dir}",
