@@ -263,24 +263,24 @@ build {
   #   restart_timeout = "10m"
   # }
 
-  provisioner "powershell" {
-    elevated_password = "${var.winrm_password}"
-    elevated_user     = "${var.winrm_user}"
-    environment_vars  = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
-    scripts = [
-      # "${path.root}/../scripts/build/Install-VisualStudio.ps1",
-      "${path.root}/../scripts/build/Install-KubernetesTools.ps1",
-      "${path.root}/../scripts/build/Install-NET48-devpack.ps1"
-    ]
-    valid_exit_codes = [0, 3010]
-  }
+  # provisioner "powershell" {
+  #   elevated_password = "${var.winrm_password}"
+  #   elevated_user     = "${var.winrm_user}"
+  #   environment_vars  = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
+  #   scripts = [
+  #     # "${path.root}/../scripts/build/Install-VisualStudio.ps1",
+  #     "${path.root}/../scripts/build/Install-KubernetesTools.ps1",
+  #     "${path.root}/../scripts/build/Install-NET48-devpack.ps1"
+  #   ]
+  #   valid_exit_codes = [0, 3010]
+  # }
 
   provisioner "powershell" {
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     scripts = [
-      "${path.root}/../scripts/build/Install-Wix.ps1",
-      "${path.root}/../scripts/build/Install-WDK.ps1",
-      "${path.root}/../scripts/build/Install-VSExtensions.ps1",
+      # "${path.root}/../scripts/build/Install-Wix.ps1",
+      # "${path.root}/../scripts/build/Install-WDK.ps1", # todo: smth wrong with this one
+      # "${path.root}/../scripts/build/Install-VSExtensions.ps1",
       # "${path.root}/../scripts/build/Install-AzureCli.ps1",
       # "${path.root}/../scripts/build/Install-AzureDevOpsCli.ps1",
       "${path.root}/../scripts/build/Install-ChocolateyPackages.ps1",
