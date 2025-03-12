@@ -172,39 +172,39 @@ build {
   name    = "Proxmox Build"
   sources = ["source.proxmox-clone.windows2019"]
 
-  # provisioner "powershell" {
-  #   elevated_user     = "${var.winrm_user}"
-  #   elevated_password = "${var.winrm_password}"
-  #   inline = [
-  #     "New-Item -Path ${var.image_folder} -ItemType Directory -Force",
-  #     "New-Item -Path ${var.temp_dir} -ItemType Directory -Force",
-  #     "$acl = Get-Acl -Path ${var.temp_dir}",
-  #     "$accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule('Everyone', 'FullControl', 'ContainerInherit,ObjectInherit', 'None', 'Allow')",
-  #     "$acl.SetAccessRule($accessRule)",
-  #     "Set-Acl -Path ${var.temp_dir} -AclObject $acl",
-  #     "Write-Host 'Directories created and permissions set'"
-  #   ]
-  # }
+  provisioner "powershell" {
+    elevated_user     = "${var.winrm_user}"
+    elevated_password = "${var.winrm_password}"
+    inline = [
+      "New-Item -Path ${var.image_folder} -ItemType Directory -Force",
+      "New-Item -Path ${var.temp_dir} -ItemType Directory -Force",
+      "$acl = Get-Acl -Path ${var.temp_dir}",
+      "$accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule('Everyone', 'FullControl', 'ContainerInherit,ObjectInherit', 'None', 'Allow')",
+      "$acl.SetAccessRule($accessRule)",
+      "Set-Acl -Path ${var.temp_dir} -AclObject $acl",
+      "Write-Host 'Directories created and permissions set'"
+    ]
+  }
 
-  # provisioner "powershell" {
-  #   elevated_user     = "${var.winrm_user}"
-  #   elevated_password = "${var.winrm_password}"
-  #   inline = [
-  #     "Get-Volume | Where-Object { $_.FileSystemLabel -eq 'runner_files' } | ForEach-Object {",
-  #     "  $driveLetter = $_.DriveLetter + ':'",
-  #     "  Copy-Item -Path \"$driveLetter\\*\" -Destination \"${var.image_folder}\\\" -Recurse -Force",
-  #     "}",
-  #     "Move-Item '${var.image_folder}\\assets\\post-gen' 'C:\\post-generation' -Force",
-  #     "Remove-Item -Recurse '${var.image_folder}\\assets' -Force",
-  #     "Move-Item '${var.image_folder}\\scripts\\helpers' '${var.helper_script_folder}\\ImageHelpers' -Force",
-  #     "New-Item -Type Directory -Path '${var.helper_script_folder}\\TestsHelpers\\' -Force",
-  #     "Move-Item '${var.image_folder}\\scripts\\tests\\Helpers.psm1' '${var.helper_script_folder}\\TestsHelpers\\TestsHelpers.psm1' -Force",
-  #     "Move-Item '${var.image_folder}\\scripts\\tests' '${var.image_folder}\\tests' -Force",
-  #     "Remove-Item -Recurse '${var.image_folder}\\scripts' -Force",
-  #     "Move-Item '${var.image_folder}\\toolsets\\toolset-2019.json' '${var.image_folder}\\toolset.json' -Force",
-  #     "Remove-Item -Recurse '${var.image_folder}\\toolsets' -Force"
-  #   ]
-  # }
+  provisioner "powershell" {
+    elevated_user     = "${var.winrm_user}"
+    elevated_password = "${var.winrm_password}"
+    inline = [
+      "Get-Volume | Where-Object { $_.FileSystemLabel -eq 'runner_files' } | ForEach-Object {",
+      "  $driveLetter = $_.DriveLetter + ':'",
+      "  Copy-Item -Path \"$driveLetter\\*\" -Destination \"${var.image_folder}\\\" -Recurse -Force",
+      "}",
+      "Move-Item '${var.image_folder}\\assets\\post-gen' 'C:\\post-generation' -Force",
+      "Remove-Item -Recurse '${var.image_folder}\\assets' -Force",
+      "Move-Item '${var.image_folder}\\scripts\\helpers' '${var.helper_script_folder}\\ImageHelpers' -Force",
+      "New-Item -Type Directory -Path '${var.helper_script_folder}\\TestsHelpers\\' -Force",
+      "Move-Item '${var.image_folder}\\scripts\\tests\\Helpers.psm1' '${var.helper_script_folder}\\TestsHelpers\\TestsHelpers.psm1' -Force",
+      "Move-Item '${var.image_folder}\\scripts\\tests' '${var.image_folder}\\tests' -Force",
+      "Remove-Item -Recurse '${var.image_folder}\\scripts' -Force",
+      "Move-Item '${var.image_folder}\\toolsets\\toolset-2019.json' '${var.image_folder}\\toolset.json' -Force",
+      "Remove-Item -Recurse '${var.image_folder}\\toolsets' -Force"
+    ]
+  }
 
   # provisioner "powershell" {
   #   inline = ["if (-not ((net localgroup Administrators) -contains '${var.winrm_user}')) { exit 1 }"]
