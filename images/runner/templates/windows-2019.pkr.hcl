@@ -186,15 +186,6 @@ build {
     ]
   }
 
-  provisioner "windows-shell" {
-    inline = [
-      "net user ${var.winrm_user} ${var.winrm_password} /add /passwordchg:no /passwordreq:yes /active:yes /Y",
-      "net localgroup Administrators ${var.winrm_user} /add",
-      "winrm set winrm/config/service/auth @{Basic=\"true\"}",
-      "winrm get winrm/config/service/auth"
-    ]
-  }
-
   provisioner "powershell" {
     inline = ["if (-not ((net localgroup Administrators) -contains '${var.winrm_user}')) { exit 1 }"]
   }
