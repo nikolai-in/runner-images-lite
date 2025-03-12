@@ -173,9 +173,16 @@ build {
   sources = ["source.proxmox-clone.windows2019"]
 
   provisioner "powershell" {
+    elevated_user     = "${var.winrm_user}"
+    elevated_password = "${var.winrm_password}"
     inline = [
       "New-Item -Path ${var.image_folder} -ItemType Directory -Force",
-      "New-Item -Path ${var.temp_dir} -ItemType Directory -Force"
+      "New-Item -Path ${var.temp_dir} -ItemType Directory -Force",
+      "$acl = Get-Acl -Path ${var.temp_dir}",
+      "$accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule('Everyone', 'FullControl', 'ContainerInherit,ObjectInherit', 'None', 'Allow')",
+      "$acl.SetAccessRule($accessRule)",
+      "Set-Acl -Path ${var.temp_dir} -AclObject $acl",
+      "Write-Host 'Directories created and permissions set'"
     ]
   }
 
