@@ -104,7 +104,7 @@ source "proxmox-clone" "windows2019" {
 
 build {
   name    = "Proxmox Build"
-  sources = ["source.proxmox-iso.windows2019"]
+  sources = ["source.proxmox-clone.windows2019"]
 
   provisioner "powershell" {
     inline = [
