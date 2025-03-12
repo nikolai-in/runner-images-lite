@@ -79,9 +79,13 @@ variable "node" {
   description = "Proxmox cluster node"
 }
 
+variable "clone_vm_id" {
+  type        = number
+  description = "ID of the vm to clone"
+}
+
 source "proxmox-clone" "windows2019" {
-  clone_vm             = "templ-win2019-desktop"
-  cloud_init           = true
+  clone_vm_id          = var.clone_vm_id
   template_name        = "runner-win2019-${formatdate("YYYY-MM-DD", timestamp())}"
   template_description = "Created on: ${timestamp()}"
   full_clone           = false
