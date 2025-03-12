@@ -186,89 +186,89 @@ build {
     ]
   }
 
-  provisioner "powershell" {
-    elevated_user     = "${var.winrm_user}"
-    elevated_password = "${var.winrm_password}"
-    inline = [
-      "Get-Volume | Where-Object { $_.FileSystemLabel -eq 'runner_files' } | ForEach-Object {",
-      "  $driveLetter = $_.DriveLetter + ':'",
-      "  Copy-Item -Path \"$driveLetter\\*\" -Destination \"${var.image_folder}\\\" -Recurse -Force",
-      "}",
-      "Move-Item '${var.image_folder}\\assets\\post-gen' 'C:\\post-generation' -Force",
-      "Remove-Item -Recurse '${var.image_folder}\\assets' -Force",
-      "Move-Item '${var.image_folder}\\scripts\\helpers' '${var.helper_script_folder}\\ImageHelpers' -Force",
-      "New-Item -Type Directory -Path '${var.helper_script_folder}\\TestsHelpers\\' -Force",
-      "Move-Item '${var.image_folder}\\scripts\\tests\\Helpers.psm1' '${var.helper_script_folder}\\TestsHelpers\\TestsHelpers.psm1' -Force",
-      "Move-Item '${var.image_folder}\\scripts\\tests' '${var.image_folder}\\tests' -Force",
-      "Remove-Item -Recurse '${var.image_folder}\\scripts' -Force",
-      "Move-Item '${var.image_folder}\\toolsets\\toolset-2019.json' '${var.image_folder}\\toolset.json' -Force",
-      "Remove-Item -Recurse '${var.image_folder}\\toolsets' -Force"
-    ]
-  }
+  # provisioner "powershell" {
+  #   elevated_user     = "${var.winrm_user}"
+  #   elevated_password = "${var.winrm_password}"
+  #   inline = [
+  #     "Get-Volume | Where-Object { $_.FileSystemLabel -eq 'runner_files' } | ForEach-Object {",
+  #     "  $driveLetter = $_.DriveLetter + ':'",
+  #     "  Copy-Item -Path \"$driveLetter\\*\" -Destination \"${var.image_folder}\\\" -Recurse -Force",
+  #     "}",
+  #     "Move-Item '${var.image_folder}\\assets\\post-gen' 'C:\\post-generation' -Force",
+  #     "Remove-Item -Recurse '${var.image_folder}\\assets' -Force",
+  #     "Move-Item '${var.image_folder}\\scripts\\helpers' '${var.helper_script_folder}\\ImageHelpers' -Force",
+  #     "New-Item -Type Directory -Path '${var.helper_script_folder}\\TestsHelpers\\' -Force",
+  #     "Move-Item '${var.image_folder}\\scripts\\tests\\Helpers.psm1' '${var.helper_script_folder}\\TestsHelpers\\TestsHelpers.psm1' -Force",
+  #     "Move-Item '${var.image_folder}\\scripts\\tests' '${var.image_folder}\\tests' -Force",
+  #     "Remove-Item -Recurse '${var.image_folder}\\scripts' -Force",
+  #     "Move-Item '${var.image_folder}\\toolsets\\toolset-2019.json' '${var.image_folder}\\toolset.json' -Force",
+  #     "Remove-Item -Recurse '${var.image_folder}\\toolsets' -Force"
+  #   ]
+  # }
 
-  provisioner "powershell" {
-    inline = ["if (-not ((net localgroup Administrators) -contains '${var.winrm_user}')) { exit 1 }"]
-  }
+  # provisioner "powershell" {
+  #   inline = ["if (-not ((net localgroup Administrators) -contains '${var.winrm_user}')) { exit 1 }"]
+  # }
 
-  provisioner "powershell" {
-    elevated_password = "${var.winrm_password}"
-    elevated_user     = "${var.winrm_user}"
-    scripts           = ["${path.root}/../scripts/build/Install-NET48.ps1"]
-    valid_exit_codes  = [0, 3010]
-  }
+  # provisioner "powershell" {
+  #   elevated_password = "${var.winrm_password}"
+  #   elevated_user     = "${var.winrm_user}"
+  #   scripts           = ["${path.root}/../scripts/build/Install-NET48.ps1"]
+  #   valid_exit_codes  = [0, 3010]
+  # }
 
-  provisioner "windows-restart" {
-    restart_timeout = "10m"
-  }
+  # provisioner "windows-restart" {
+  #   restart_timeout = "10m"
+  # }
 
-  provisioner "powershell" {
-    environment_vars = ["IMAGE_VERSION=${var.image_version}", "IMAGE_OS=${var.image_os}", "AGENT_TOOLSDIRECTORY=${var.agent_tools_directory}", "IMAGEDATA_FILE=${var.imagedata_file}", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
-    execution_policy = "unrestricted"
-    scripts = [
-      "${path.root}/../scripts/build/Configure-WindowsDefender.ps1",
-      "${path.root}/../scripts/build/Configure-PowerShell.ps1",
-      "${path.root}/../scripts/build/Install-PowerShellModules.ps1",
-      "${path.root}/../scripts/build/Install-WindowsFeatures.ps1",
-      "${path.root}/../scripts/build/Install-Chocolatey.ps1",
-      "${path.root}/../scripts/build/Configure-BaseImage.ps1",
-      "${path.root}/../scripts/build/Configure-ImageDataFile.ps1",
-      "${path.root}/../scripts/build/Configure-SystemEnvironment.ps1",
-      "${path.root}/../scripts/build/Configure-DotnetSecureChannel.ps1"
-    ]
-  }
+  # provisioner "powershell" {
+  #   environment_vars = ["IMAGE_VERSION=${var.image_version}", "IMAGE_OS=${var.image_os}", "AGENT_TOOLSDIRECTORY=${var.agent_tools_directory}", "IMAGEDATA_FILE=${var.imagedata_file}", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
+  #   execution_policy = "unrestricted"
+  #   scripts = [
+  #     "${path.root}/../scripts/build/Configure-WindowsDefender.ps1",
+  #     "${path.root}/../scripts/build/Configure-PowerShell.ps1",
+  #     "${path.root}/../scripts/build/Install-PowerShellModules.ps1",
+  #     "${path.root}/../scripts/build/Install-WindowsFeatures.ps1",
+  #     "${path.root}/../scripts/build/Install-Chocolatey.ps1",
+  #     "${path.root}/../scripts/build/Configure-BaseImage.ps1",
+  #     "${path.root}/../scripts/build/Configure-ImageDataFile.ps1",
+  #     "${path.root}/../scripts/build/Configure-SystemEnvironment.ps1",
+  #     "${path.root}/../scripts/build/Configure-DotnetSecureChannel.ps1"
+  #   ]
+  # }
 
-  provisioner "windows-restart" {
-    restart_timeout = "30m"
-  }
+  # provisioner "windows-restart" {
+  #   restart_timeout = "30m"
+  # }
 
-  provisioner "powershell" {
-    inline = ["Set-Service -Name wlansvc -StartupType Manual", "if ($(Get-Service -Name wlansvc).Status -eq 'Running') { Stop-Service -Name wlansvc}"]
-  }
+  # provisioner "powershell" {
+  #   inline = ["Set-Service -Name wlansvc -StartupType Manual", "if ($(Get-Service -Name wlansvc).Status -eq 'Running') { Stop-Service -Name wlansvc}"]
+  # }
 
-  provisioner "powershell" {
-    environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
-    scripts = [
-      "${path.root}/../scripts/build/Install-VCRedist.ps1",
-      "${path.root}/../scripts/build/Install-Docker.ps1",
-      "${path.root}/../scripts/build/Install-DockerWinCred.ps1",
-      "${path.root}/../scripts/build/Install-DockerCompose.ps1",
-      "${path.root}/../scripts/build/Install-PowershellCore.ps1",
-      "${path.root}/../scripts/build/Install-WebPlatformInstaller.ps1",
-      "${path.root}/../scripts/build/Install-Runner.ps1",
-      "${path.root}/../scripts/build/Install-TortoiseSvn.ps1"
-    ]
-  }
+  # provisioner "powershell" {
+  #   environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
+  #   scripts = [
+  #     "${path.root}/../scripts/build/Install-VCRedist.ps1",
+  #     "${path.root}/../scripts/build/Install-Docker.ps1",
+  #     "${path.root}/../scripts/build/Install-DockerWinCred.ps1",
+  #     "${path.root}/../scripts/build/Install-DockerCompose.ps1",
+  #     "${path.root}/../scripts/build/Install-PowershellCore.ps1",
+  #     "${path.root}/../scripts/build/Install-WebPlatformInstaller.ps1",
+  #     "${path.root}/../scripts/build/Install-Runner.ps1",
+  #     "${path.root}/../scripts/build/Install-TortoiseSvn.ps1"
+  #   ]
+  # }
 
-  provisioner "windows-restart" {
-    restart_timeout = "10m"
-  }
+  # provisioner "windows-restart" {
+  #   restart_timeout = "10m"
+  # }
 
   provisioner "powershell" {
     elevated_password = "${var.winrm_password}"
     elevated_user     = "${var.winrm_user}"
     environment_vars  = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     scripts = [
-      "${path.root}/../scripts/build/Install-VisualStudio.ps1",
+      # "${path.root}/../scripts/build/Install-VisualStudio.ps1",
       "${path.root}/../scripts/build/Install-KubernetesTools.ps1",
       "${path.root}/../scripts/build/Install-NET48-devpack.ps1"
     ]
@@ -290,19 +290,19 @@ build {
     ]
   }
 
-  provisioner "powershell" {
-    execution_policy = "remotesigned"
-    environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
-    scripts          = ["${path.root}/../scripts/build/Install-ServiceFabricSDK.ps1"]
-  }
+  # provisioner "powershell" {
+  #   execution_policy = "remotesigned"
+  #   environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
+  #   scripts          = ["${path.root}/../scripts/build/Install-ServiceFabricSDK.ps1"]
+  # }
 
   provisioner "windows-restart" {
     restart_timeout = "10m"
   }
 
-  provisioner "windows-shell" {
-    inline = ["wmic product where \"name like '%%microsoft azure powershell%%'\" call uninstall /nointeractive"]
-  }
+  # provisioner "windows-shell" {
+  #   inline = ["wmic product where \"name like '%%microsoft azure powershell%%'\" call uninstall /nointeractive"]
+  # }
 
   provisioner "powershell" {
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
@@ -313,8 +313,8 @@ build {
       "${path.root}/../scripts/build/Install-Toolset.ps1",
       "${path.root}/../scripts/build/Configure-Toolset.ps1",
       "${path.root}/../scripts/build/Install-NodeJS.ps1",
-      "${path.root}/../scripts/build/Install-AndroidSDK.ps1",
-      "${path.root}/../scripts/build/Install-PowershellAzModules.ps1",
+      # "${path.root}/../scripts/build/Install-AndroidSDK.ps1",
+      # "${path.root}/../scripts/build/Install-PowershellAzModules.ps1",
       "${path.root}/../scripts/build/Install-Pipx.ps1",
       "${path.root}/../scripts/build/Install-Git.ps1",
       "${path.root}/../scripts/build/Install-GitHub-CLI.ps1",
@@ -341,7 +341,7 @@ build {
       "${path.root}/../scripts/build/Install-Haskell.ps1",
       "${path.root}/../scripts/build/Install-Stack.ps1",
       "${path.root}/../scripts/build/Install-Miniconda.ps1",
-      "${path.root}/../scripts/build/Install-AzureCosmosDbEmulator.ps1",
+      # "${path.root}/../scripts/build/Install-AzureCosmosDbEmulator.ps1",
       "${path.root}/../scripts/build/Install-Mercurial.ps1",
       "${path.root}/../scripts/build/Install-Zstd.ps1",
       "${path.root}/../scripts/build/Install-NSIS.ps1",
@@ -352,7 +352,7 @@ build {
       "${path.root}/../scripts/build/Install-AliyunCli.ps1",
       "${path.root}/../scripts/build/Install-RootCA.ps1",
       "${path.root}/../scripts/build/Install-MongoDB.ps1",
-      "${path.root}/../scripts/build/Install-GoogleCloudCLI.ps1",
+      # "${path.root}/../scripts/build/Install-GoogleCloudCLI.ps1",
       "${path.root}/../scripts/build/Install-CodeQLBundle.ps1",
       "${path.root}/../scripts/build/Install-BizTalkBuildComponent.ps1",
       "${path.root}/../scripts/build/Configure-Diagnostics.ps1",
