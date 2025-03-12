@@ -150,6 +150,15 @@ source "proxmox-clone" "windows2019" {
   winrm_port     = "5986"
   winrm_use_ssl  = true
   winrm_insecure = true
+
+  additional_iso_files {
+    cd_files = [
+      "${path.root}/../assets",
+      "${path.root}/../scripts",
+      "${path.root}/../toolsets"
+    ]
+    cd_label = "runner_files"
+  }
 }
 
 build {
@@ -163,12 +172,12 @@ build {
     ]
   }
 
-  provisioner "file" {
-    destination = "${var.image_folder}\\"
-    sources = [
-      "${path.root}/../assets",
-      "${path.root}/../scripts",
-      "${path.root}/../toolsets"
+  provisioner "powershell" {
+    inline = [
+      "Get-Volume | Where-Object { $_.FileSystemLabel -eq 'runner_files' } | ForEach-Object {",
+      "  $driveLetter = $_.DriveLetter + ':'",
+      "  Copy-Item -Path \"$driveLetter\\*\" -Destination \"${var.image_folder}\\\" -Recurse -Force",
+      "}"
     ]
   }
 
