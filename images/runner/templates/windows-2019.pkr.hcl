@@ -196,14 +196,26 @@ build {
       "  $driveLetter = $_.DriveLetter + ':'",
       "  Copy-Item -Path \"$driveLetter\\*\" -Destination \"${var.image_folder}\\\" -Recurse -Force",
       "}",
+      # Check and remove destination before each Move-Item operation
+      "if (Test-Path 'C:\\post-generation') { Remove-Item -Path 'C:\\post-generation' -Recurse -Force }",
       "Move-Item '${var.image_folder}\\assets\\post-gen' 'C:\\post-generation' -Force",
       "Remove-Item -Recurse '${var.image_folder}\\assets' -Force",
+
+      "if (Test-Path '${var.helper_script_folder}\\ImageHelpers') { Remove-Item -Path '${var.helper_script_folder}\\ImageHelpers' -Recurse -Force }",
       "Move-Item '${var.image_folder}\\scripts\\helpers' '${var.helper_script_folder}\\ImageHelpers' -Force",
+
       "New-Item -Type Directory -Path '${var.helper_script_folder}\\TestsHelpers\\' -Force",
+      "if (Test-Path '${var.helper_script_folder}\\TestsHelpers\\TestsHelpers.psm1') { Remove-Item -Path '${var.helper_script_folder}\\TestsHelpers\\TestsHelpers.psm1' -Force }",
       "Move-Item '${var.image_folder}\\scripts\\tests\\Helpers.psm1' '${var.helper_script_folder}\\TestsHelpers\\TestsHelpers.psm1' -Force",
+
+      "if (Test-Path '${var.image_folder}\\tests') { Remove-Item -Path '${var.image_folder}\\tests' -Recurse -Force }",
       "Move-Item '${var.image_folder}\\scripts\\tests' '${var.image_folder}\\tests' -Force",
+
       "Remove-Item -Recurse '${var.image_folder}\\scripts' -Force",
+
+      "if (Test-Path '${var.image_folder}\\toolset.json') { Remove-Item -Path '${var.image_folder}\\toolset.json' -Force }",
       "Move-Item '${var.image_folder}\\toolsets\\toolset-2019.json' '${var.image_folder}\\toolset.json' -Force",
+
       "Remove-Item -Recurse '${var.image_folder}\\toolsets' -Force"
     ]
   }
