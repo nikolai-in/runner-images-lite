@@ -114,6 +114,12 @@ variable "bridge" {
   description = "Network bridge name"
 }
 
+variable "iso_storage_pool" {
+  type        = string
+  description = "Proxmox storage pool for ISO files"
+  default     = "local"
+}
+
 source "proxmox-clone" "windows2019" {
   clone_vm_id          = var.clone_vm_id
   template_name        = "runner-win2019-${formatdate("YYYY-MM-DD", timestamp())}"
@@ -157,7 +163,8 @@ source "proxmox-clone" "windows2019" {
       "${path.root}/../scripts",
       "${path.root}/../toolsets"
     ]
-    cd_label = "runner_files"
+    cd_label         = "runner_files"
+    iso_storage_pool = var.iso_storage_pool
   }
 }
 
