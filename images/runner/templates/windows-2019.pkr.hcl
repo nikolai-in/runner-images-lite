@@ -159,9 +159,9 @@ source "proxmox-clone" "windows2019" {
 
   additional_iso_files {
     cd_files = [
-      "${path.root}/../assets",
-      "${path.root}/../scripts",
-      "${path.root}/../toolsets"
+      "../assets",
+      "../scripts",
+      "../toolsets"
     ]
     cd_label         = "runner_files"
     iso_storage_pool = var.iso_storage_pool
