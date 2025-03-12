@@ -99,10 +99,26 @@ variable "socket" {
   description = "Amount of CPU sockets"
 }
 
+variable "vlan" {
+  type        = number
+  description = "Network VLAN Tag (optional, set to -1 to disable VLAN tagging)"
+  default     = -1
+  validation {
+    condition     = var.vlan == -1 || (var.vlan >= 1 && var.vlan <= 4094)
+    error_message = "VLAN tag must be -1 (for no tagging) or between 1 and 4094."
+  }
+}
+
+variable "bridge" {
+  type        = string
+  description = "Network bridge name"
+}
+
 source "proxmox-clone" "windows2019" {
   clone_vm_id          = var.clone_vm_id
   template_name        = "runner-win2019-${formatdate("YYYY-MM-DD", timestamp())}"
   template_description = "Created on: ${timestamp()}"
+  vm_name              = "building-runner-win2019-${formatdate("YYYY-MM-DD", timestamp())}"
   full_clone           = false
 
   # Proxmox Host Conection
@@ -112,13 +128,21 @@ source "proxmox-clone" "windows2019" {
   password                 = var.proxmox_password
   node                     = var.node
 
-  memory   = var.memory
-  cores    = var.cores
-  sockets  = var.socket
-  cpu_type = "host"
-  os       = "win10"
-  boot     = "order=scsi0"
+  memory          = var.memory
+  cores           = var.cores
+  sockets         = var.socket
+  cpu_type        = "host"
+  os              = "win10"
+  boot            = "order=scsi0"
+  scsi_controller = "virtio-scsi-pci"
 
+
+  # Network
+  network_adapters {
+    model    = "virtio"
+    bridge   = var.bridge
+    vlan_tag = var.vlan >= 1 ? var.vlan : null
+  }
   communicator   = "winrm"
   winrm_username = var.winrm_user
   winrm_password = var.winrm_password
