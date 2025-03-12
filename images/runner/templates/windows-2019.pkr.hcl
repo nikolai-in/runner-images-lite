@@ -84,6 +84,21 @@ variable "clone_vm_id" {
   description = "ID of the vm to clone"
 }
 
+variable "memory" {
+  type        = number
+  description = "VM memory in MB"
+}
+
+variable "cores" {
+  type        = number
+  description = "Amount of CPU cores"
+}
+
+variable "socket" {
+  type        = number
+  description = "Amount of CPU sockets"
+}
+
 source "proxmox-clone" "windows2019" {
   clone_vm_id          = var.clone_vm_id
   template_name        = "runner-win2019-${formatdate("YYYY-MM-DD", timestamp())}"
@@ -96,6 +111,13 @@ source "proxmox-clone" "windows2019" {
   username                 = var.proxmox_user
   password                 = var.proxmox_password
   node                     = var.node
+
+  memory   = var.memory
+  cores    = var.cores
+  sockets  = var.socket
+  cpu_type = "host"
+  os       = "win10"
+  boot     = "order=scsi0"
 
   communicator   = "winrm"
   winrm_username = var.winrm_user
