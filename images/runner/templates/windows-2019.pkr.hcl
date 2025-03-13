@@ -289,20 +289,20 @@ build {
   #   valid_exit_codes = [0, 3010]
   # }
 
-  provisioner "powershell" {
-    environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
-    scripts = [
-      # "${path.root}/../scripts/build/Install-Wix.ps1",
-      # "${path.root}/../scripts/build/Install-WDK.ps1", # todo: smth wrong with this one
-      # "${path.root}/../scripts/build/Install-VSExtensions.ps1",
-      # "${path.root}/../scripts/build/Install-AzureCli.ps1",
-      # "${path.root}/../scripts/build/Install-AzureDevOpsCli.ps1",
-      # "${path.root}/../scripts/build/Install-ChocolateyPackages.ps1",
-      # "${path.root}/../scripts/build/Install-JavaTools.ps1",
-      # "${path.root}/../scripts/build/Install-Kotlin.ps1",
-      # "${path.root}/../scripts/build/Install-OpenSSL.ps1"
-    ]
-  }
+  # provisioner "powershell" {
+  #   environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
+  #   scripts = [
+  #     "${path.root}/../scripts/build/Install-Wix.ps1",
+  #     "${path.root}/../scripts/build/Install-WDK.ps1", # todo: smth wrong with this one
+  #     "${path.root}/../scripts/build/Install-VSExtensions.ps1",
+  #     "${path.root}/../scripts/build/Install-AzureCli.ps1",
+  #     "${path.root}/../scripts/build/Install-AzureDevOpsCli.ps1",
+  #     "${path.root}/../scripts/build/Install-ChocolateyPackages.ps1",
+  #     "${path.root}/../scripts/build/Install-JavaTools.ps1",
+  #     "${path.root}/../scripts/build/Install-Kotlin.ps1",
+  #     "${path.root}/../scripts/build/Install-OpenSSL.ps1"
+  #   ]
+  # }
 
   # provisioner "powershell" {
   #   execution_policy = "remotesigned"
