@@ -297,10 +297,10 @@ build {
       # "${path.root}/../scripts/build/Install-VSExtensions.ps1",
       # "${path.root}/../scripts/build/Install-AzureCli.ps1",
       # "${path.root}/../scripts/build/Install-AzureDevOpsCli.ps1",
-      "${path.root}/../scripts/build/Install-ChocolateyPackages.ps1",
-      "${path.root}/../scripts/build/Install-JavaTools.ps1",
-      "${path.root}/../scripts/build/Install-Kotlin.ps1",
-      "${path.root}/../scripts/build/Install-OpenSSL.ps1"
+      # "${path.root}/../scripts/build/Install-ChocolateyPackages.ps1",
+      # "${path.root}/../scripts/build/Install-JavaTools.ps1",
+      # "${path.root}/../scripts/build/Install-Kotlin.ps1",
+      # "${path.root}/../scripts/build/Install-OpenSSL.ps1"
     ]
   }
 
@@ -321,21 +321,21 @@ build {
   provisioner "powershell" {
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     scripts = [
-      "${path.root}/../scripts/build/Install-ActionsCache.ps1",
-      "${path.root}/../scripts/build/Install-Ruby.ps1",
-      "${path.root}/../scripts/build/Install-PyPy.ps1",
-      "${path.root}/../scripts/build/Install-Toolset.ps1",
-      "${path.root}/../scripts/build/Configure-Toolset.ps1",
-      "${path.root}/../scripts/build/Install-NodeJS.ps1",
-      # "${path.root}/../scripts/build/Install-AndroidSDK.ps1",
-      # "${path.root}/../scripts/build/Install-PowershellAzModules.ps1",
-      "${path.root}/../scripts/build/Install-Pipx.ps1",
-      "${path.root}/../scripts/build/Install-Git.ps1",
-      "${path.root}/../scripts/build/Install-GitHub-CLI.ps1",
-      "${path.root}/../scripts/build/Install-PHP.ps1",
-      "${path.root}/../scripts/build/Install-Rust.ps1",
-      "${path.root}/../scripts/build/Install-Sbt.ps1",
-      "${path.root}/../scripts/build/Install-Chrome.ps1",
+      # "${path.root}/../scripts/build/Install-ActionsCache.ps1",
+      # "${path.root}/../scripts/build/Install-Ruby.ps1",
+      # "${path.root}/../scripts/build/Install-PyPy.ps1",
+      # "${path.root}/../scripts/build/Install-Toolset.ps1",
+      # "${path.root}/../scripts/build/Configure-Toolset.ps1",
+      # "${path.root}/../scripts/build/Install-NodeJS.ps1",
+      # # "${path.root}/../scripts/build/Install-AndroidSDK.ps1",
+      # # "${path.root}/../scripts/build/Install-PowershellAzModules.ps1",
+      # "${path.root}/../scripts/build/Install-Pipx.ps1",
+      # "${path.root}/../scripts/build/Install-Git.ps1",
+      # "${path.root}/../scripts/build/Install-GitHub-CLI.ps1",
+      # "${path.root}/../scripts/build/Install-PHP.ps1",
+      # "${path.root}/../scripts/build/Install-Rust.ps1",
+      # "${path.root}/../scripts/build/Install-Sbt.ps1",
+      # "${path.root}/../scripts/build/Install-Chrome.ps1",
       "${path.root}/../scripts/build/Install-EdgeDriver.ps1",
       "${path.root}/../scripts/build/Install-Firefox.ps1",
       "${path.root}/../scripts/build/Install-Selenium.ps1",
