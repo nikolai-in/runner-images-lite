@@ -310,9 +310,9 @@ build {
   #   scripts          = ["${path.root}/../scripts/build/Install-ServiceFabricSDK.ps1"]
   # }
 
-  provisioner "windows-restart" {
-    restart_timeout = "10m"
-  }
+  # provisioner "windows-restart" {
+  #   restart_timeout = "10m"
+  # }
 
   # provisioner "windows-shell" {
   #   inline = ["wmic product where \"name like '%%microsoft azure powershell%%'\" call uninstall /nointeractive"]
@@ -336,38 +336,38 @@ build {
       # "${path.root}/../scripts/build/Install-Rust.ps1",
       # "${path.root}/../scripts/build/Install-Sbt.ps1",
       # "${path.root}/../scripts/build/Install-Chrome.ps1",
-      "${path.root}/../scripts/build/Install-EdgeDriver.ps1",
-      "${path.root}/../scripts/build/Install-Firefox.ps1",
-      "${path.root}/../scripts/build/Install-Selenium.ps1",
-      "${path.root}/../scripts/build/Install-IEWebDriver.ps1",
-      "${path.root}/../scripts/build/Install-Apache.ps1",
-      "${path.root}/../scripts/build/Install-Nginx.ps1",
-      "${path.root}/../scripts/build/Install-Msys2.ps1",
-      "${path.root}/../scripts/build/Install-WinAppDriver.ps1",
-      "${path.root}/../scripts/build/Install-R.ps1",
-      "${path.root}/../scripts/build/Install-AWSTools.ps1",
-      "${path.root}/../scripts/build/Install-DACFx.ps1",
-      "${path.root}/../scripts/build/Install-MysqlCli.ps1",
-      "${path.root}/../scripts/build/Install-SQLPowerShellTools.ps1",
-      "${path.root}/../scripts/build/Install-SQLOLEDBDriver.ps1",
-      "${path.root}/../scripts/build/Install-DotnetSDK.ps1",
-      "${path.root}/../scripts/build/Install-Mingw64.ps1",
-      "${path.root}/../scripts/build/Install-Haskell.ps1",
-      "${path.root}/../scripts/build/Install-Stack.ps1",
+      # "${path.root}/../scripts/build/Install-EdgeDriver.ps1",
+      # "${path.root}/../scripts/build/Install-Firefox.ps1",
+      # "${path.root}/../scripts/build/Install-Selenium.ps1",
+      # "${path.root}/../scripts/build/Install-IEWebDriver.ps1",
+      # "${path.root}/../scripts/build/Install-Apache.ps1",
+      # "${path.root}/../scripts/build/Install-Nginx.ps1",
+      # "${path.root}/../scripts/build/Install-Msys2.ps1",
+      # "${path.root}/../scripts/build/Install-WinAppDriver.ps1",
+      # "${path.root}/../scripts/build/Install-R.ps1",
+      # "${path.root}/../scripts/build/Install-AWSTools.ps1",
+      # "${path.root}/../scripts/build/Install-DACFx.ps1",
+      # "${path.root}/../scripts/build/Install-MysqlCli.ps1",
+      # "${path.root}/../scripts/build/Install-SQLPowerShellTools.ps1",
+      # "${path.root}/../scripts/build/Install-SQLOLEDBDriver.ps1",
+      # "${path.root}/../scripts/build/Install-DotnetSDK.ps1",
+      # "${path.root}/../scripts/build/Install-Mingw64.ps1",
+      # "${path.root}/../scripts/build/Install-Haskell.ps1",
+      # "${path.root}/../scripts/build/Install-Stack.ps1",
       "${path.root}/../scripts/build/Install-Miniconda.ps1",
       # "${path.root}/../scripts/build/Install-AzureCosmosDbEmulator.ps1",
       "${path.root}/../scripts/build/Install-Mercurial.ps1",
       "${path.root}/../scripts/build/Install-Zstd.ps1",
       "${path.root}/../scripts/build/Install-NSIS.ps1",
-      "${path.root}/../scripts/build/Install-CloudFoundryCli.ps1",
+      # "${path.root}/../scripts/build/Install-CloudFoundryCli.ps1",
       "${path.root}/../scripts/build/Install-Vcpkg.ps1",
       "${path.root}/../scripts/build/Install-PostgreSQL.ps1",
-      "${path.root}/../scripts/build/Install-Bazel.ps1",
-      "${path.root}/../scripts/build/Install-AliyunCli.ps1",
-      "${path.root}/../scripts/build/Install-RootCA.ps1",
-      "${path.root}/../scripts/build/Install-MongoDB.ps1",
+      # "${path.root}/../scripts/build/Install-Bazel.ps1",
+      # "${path.root}/../scripts/build/Install-AliyunCli.ps1",
+      # "${path.root}/../scripts/build/Install-RootCA.ps1",
+      # "${path.root}/../scripts/build/Install-MongoDB.ps1",
       # "${path.root}/../scripts/build/Install-GoogleCloudCLI.ps1",
-      "${path.root}/../scripts/build/Install-CodeQLBundle.ps1",
+      # "${path.root}/../scripts/build/Install-CodeQLBundle.ps1",
       "${path.root}/../scripts/build/Install-BizTalkBuildComponent.ps1",
       "${path.root}/../scripts/build/Configure-Diagnostics.ps1",
       "${path.root}/../scripts/build/Configure-DynamicPort.ps1",
@@ -388,7 +388,7 @@ build {
     pause_before     = "2m0s"
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     scripts = [
-      "${path.root}/../scripts/build/Install-WindowsUpdatesAfterReboot.ps1",
+      # "${path.root}/../scripts/build/Install-WindowsUpdatesAfterReboot.ps1",
       "${path.root}/../scripts/build/Invoke-Cleanup.ps1"
     ]
   }
