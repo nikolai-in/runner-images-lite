@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
     <settings pass="windowsPE">
-        <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS"
+            xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <InputLocale>en-US</InputLocale>
             <SystemLocale>en-US</SystemLocale>
             <UILanguage>en-US</UILanguage>
@@ -10,17 +11,20 @@
                 <UILanguage>en-US</UILanguage>
             </SetupUILanguage>
         </component>
-        <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-PnpCustomizationsWinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
+        <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral"
+            name="Microsoft-Windows-PnpCustomizationsWinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
             <DriverPaths>
                 <PathAndCredentials wcm:action="add" wcm:keyValue="1">
                     <Path>${cdrom_drive}\</Path>
                 </PathAndCredentials>
             </DriverPaths>
         </component>
-        <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS"
+            xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <UserData>
                 <ProductKey>
-                    <Key>N69G4-B89J2-4G8F4-WWYCC-J464C</Key>
+                    <Key>QPM6N-7J2WJ-P88HH-P3YRH-YY74H</Key>
+                    <WillShowUI>OnError</WillShowUI>
                 </ProductKey>
                 <AcceptEula>true</AcceptEula>
             </UserData>
@@ -68,8 +72,8 @@
                 <OSImage>
                     <InstallFrom>
                         <MetaData wcm:action="add">
-                            <Key>/IMAGE/INDEX</Key>
-                            <Value>${index}</Value>
+                            <Key>/IMAGE/NAME</Key>
+                            <Value>Windows 10 IoT Enterprise LTSC 2021</Value>
                         </MetaData>
                     </InstallFrom>
                     <InstallTo>
@@ -81,7 +85,8 @@
         </component>
     </settings>
     <settings pass="oobeSystem">
-        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS"
+            xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <UserAccounts>
                 <AdministratorPassword>
                     <Value>${password}</Value>
@@ -93,6 +98,10 @@
                 <HideLocalAccountScreen>true</HideLocalAccountScreen>
                 <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
                 <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
+                <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
+                <SkipUserOOBE>true</SkipUserOOBE>
+                <SkipMachineOOBE>true</SkipMachineOOBE>
+                <NetworkLocation>Work</NetworkLocation>
             </OOBE>
             <TimeZone>W. Europe Standard Time</TimeZone>
             <FirstLogonCommands>
@@ -120,5 +129,5 @@
             </AutoLogon>
         </component>
     </settings>
-    <cpi:offlineImage cpi:source="wim:d:/osdbuilder/osmedia/windows%20server%202019%20standard%20desktop%20experience%20x64%201809%2017763.1637%202101080757/os/sources/install.wim#Windows Server 2019 SERVERSTANDARD" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
+    <cpi:offlineImage cpi:source="wim:d:/sources/install.wim#Windows 10 IoT Enterprise LTSC" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
 </unattend>
