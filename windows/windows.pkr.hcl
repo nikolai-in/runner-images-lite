@@ -11,7 +11,6 @@ packer {
   }
 }
 
-
 source "proxmox-iso" "windows" {
 
   # Proxmox Host Connection
@@ -112,7 +111,11 @@ build {
       "exclude:$_.Title -like '*Preview*'",
       "include:$true",
     ]
-    update_limit = 25
+    update_limit      = 25
+    expect_disconnect = true
+    pause_before      = "30s"
+    # This will only run when perform_windows_updates is true
+    only = var.perform_windows_updates ? ["proxmox-iso.windows"] : [""]
   }
 
   provisioner "powershell" {

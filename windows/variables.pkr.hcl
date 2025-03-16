@@ -96,3 +96,9 @@ variable "cdrom_drive" {
   description = "CD-ROM Driveletter for extra iso"
   default     = "D:"
 }
+
+variable "perform_windows_updates" {
+  type        = bool
+  default     = true
+  description = "Whether to perform Windows updates during build"
+}
