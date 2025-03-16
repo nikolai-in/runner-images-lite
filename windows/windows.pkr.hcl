@@ -121,7 +121,7 @@ build {
   }
 
   provisioner "file" {
-    source      = "./assets/config/"
+    source      = "./assets/configs/"
     destination = "C://Program Files//Cloudbase Solutions//Cloudbase-Init//conf"
   }
 
