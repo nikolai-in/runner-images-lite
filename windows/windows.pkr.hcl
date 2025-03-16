@@ -135,11 +135,11 @@ build {
     ]
   }
 
-  provisioner "powershell" {
-    inline = [
-      "Set-Location -Path \"C:\\Program Files\\Cloudbase Solutions\\Cloudbase-Init\\conf\"",
-      "C:\\Windows\\System32\\Sysprep\\Sysprep.exe /oobe /generalize /unattend:unattend.xml"
-    ]
-  }
+  # provisioner "powershell" {
+  #   inline = [
+  #     "Set-Location -Path \"C:\\Program Files\\Cloudbase Solutions\\Cloudbase-Init\\conf\"",
+  #     "C:\\Windows\\System32\\Sysprep\\Sysprep.exe /oobe /generalize /unattend:unattend.xml"
+  #   ]
+  # }
 
 }
