@@ -12,9 +12,9 @@ packer {
 }
 
 
-source "proxmox-iso" "windows2019" {
+source "proxmox-iso" "windows" {
 
-  # Proxmox Host Conection
+  # Proxmox Host Connection
   proxmox_url              = var.proxmox_url
   insecure_skip_tls_verify = true
   username                 = var.proxmox_user
@@ -34,7 +34,6 @@ source "proxmox-iso" "windows2019" {
     efi_type          = "4m"
   }
 
-  # Windows Server ISO File
   boot_iso {
     iso_file         = var.windows_iso
     iso_storage_pool = var.iso_storage
@@ -42,9 +41,9 @@ source "proxmox-iso" "windows2019" {
   }
 
   additional_iso_files {
-    cd_files = ["./build_files/drivers/*", "./build_files/scripts/ConfigureRemotingForAnsible.ps1", "./build_files/software/virtio-win-guest-tools.exe"]
+    cd_files = ["./assets/drivers/*", "./assets/scripts/ConfigureRemotingForAnsible.ps1", "./assets/software/virtio-win-guest-tools.exe"]
     cd_content = {
-      "autounattend.xml" = templatefile("./build_files/templates/unattend.pkrtpl", { password = var.winrm_password, cdrom_drive = var.cdrom_drive, index = lookup(var.image_index, var.template, "core") })
+      "autounattend.xml" = templatefile("./assets/templates/unattend.pkrtpl", { password = var.winrm_password, cdrom_drive = var.cdrom_drive })
     }
     cd_label         = "Unattend"
     iso_storage_pool = var.iso_storage
@@ -53,16 +52,16 @@ source "proxmox-iso" "windows2019" {
     index            = 0
   }
 
-  template_name           = "templ-win2019-${var.template}"
+  template_name           = "templ-win-runner"
   template_description    = "Created on: ${timestamp()}"
-  vm_name                 = "win19-${var.template}"
+  vm_name                 = "win-runner"
   memory                  = var.memory
   cores                   = var.cores
   sockets                 = var.socket
   cpu_type                = "host"
   os                      = "win10"
   scsi_controller         = "virtio-scsi-pci"
-  cloud_init              = false
+  cloud_init              = true
   cloud_init_storage_pool = var.cloud_init_storage
 
   # Network
@@ -85,13 +84,13 @@ source "proxmox-iso" "windows2019" {
   communicator   = "winrm"
   winrm_username = var.winrm_user
   winrm_password = var.winrm_password
-  winrm_timeout  = "90m"
+  winrm_timeout  = "1h"
   winrm_port     = "5986"
   winrm_use_ssl  = true
   winrm_insecure = true
 
   # Boot
-  boot      = "order=ide2;scsi0"
+  boot      = "order=scsi0"
   boot_wait = "3s"
   boot_command = [
     "<enter><wait><enter>",
@@ -101,7 +100,7 @@ source "proxmox-iso" "windows2019" {
 
 build {
   name    = "Proxmox Build"
-  sources = ["source.proxmox-iso.windows2019"]
+  sources = ["source.proxmox-iso.windows"]
 
   provisioner "windows-restart" {
   }
@@ -116,12 +115,12 @@ build {
   }
 
   provisioner "powershell" {
-    script       = "./build_files/scripts/InstallCloudBase.ps1"
+    script       = "./assets/scripts/InstallCloudBase.ps1"
     pause_before = "1m"
   }
 
   provisioner "file" {
-    source      = "./build_files/config/"
+    source      = "./assets/config/"
     destination = "C://Program Files//Cloudbase Solutions//Cloudbase-Init//conf"
   }
 
