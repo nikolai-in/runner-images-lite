@@ -63,6 +63,7 @@ source "proxmox-iso" "windows" {
   scsi_controller         = "virtio-scsi-pci"
   cloud_init              = true
   cloud_init_storage_pool = var.cloud_init_storage
+  serials                 = ["socket"]
 
   # Network
   network_adapters {
