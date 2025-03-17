@@ -42,7 +42,7 @@ source "proxmox-iso" "windows" {
   additional_iso_files {
     cd_files = ["./assets/drivers/*", "./assets/scripts/ConfigureRemotingForAnsible.ps1", "./assets/software/virtio-win-guest-tools.exe"]
     cd_content = {
-      "autounattend.xml" = templatefile("./build_files/templates/unattend.pkrtpl", { password = var.winrm_password, cdrom_drive = var.cdrom_drive, index = lookup(var.image_index, var.template, "core") })
+      "autounattend.xml" = templatefile("./assets/templates/unattend.pkrtpl", { password = var.winrm_password, cdrom_drive = var.cdrom_drive, index = lookup(var.image_index, var.template, "core") })
     }
     cd_label         = "Unattend"
     iso_storage_pool = var.iso_storage
