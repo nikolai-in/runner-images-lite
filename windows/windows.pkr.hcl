@@ -132,6 +132,39 @@ build {
     ]
   }
 
+  // Begin runner template
+  provisioner "powershell" {
+    inline = [
+      "New-Item -Path ${var.image_folder} -ItemType Directory -Force",
+      "New-Item -Path ${var.temp_dir} -ItemType Directory -Force"
+    ]
+  }
+
+  provisioner "file" {
+    destination = "${var.image_folder}\\"
+    sources = [
+      "${path.root}/../assets",
+      "${path.root}/../scripts",
+      "${path.root}/../toolsets"
+    ]
+  }
+
+  provisioner "powershell" {
+    inline = [
+      "Move-Item '${var.image_folder}\\assets\\post-gen' 'C:\\post-generation'",
+      "Remove-Item -Recurse '${var.image_folder}\\assets'",
+      "Move-Item '${var.image_folder}\\scripts\\docs-gen' '${var.image_folder}\\SoftwareReport'",
+      "Move-Item '${var.image_folder}\\scripts\\helpers' '${var.helper_script_folder}\\ImageHelpers'",
+      "New-Item -Type Directory -Path '${var.helper_script_folder}\\TestsHelpers\\'",
+      "Move-Item '${var.image_folder}\\scripts\\tests\\Helpers.psm1' '${var.helper_script_folder}\\TestsHelpers\\TestsHelpers.psm1'",
+      "Move-Item '${var.image_folder}\\scripts\\tests' '${var.image_folder}\\tests'",
+      "Remove-Item -Recurse '${var.image_folder}\\scripts'",
+      "Move-Item '${var.image_folder}\\toolsets\\toolset-2019.json' '${var.image_folder}\\toolset.json'",
+      "Remove-Item -Recurse '${var.image_folder}\\toolsets'"
+    ]
+  }
+
+  // Finalize the image
   provisioner "powershell" {
     inline = [
       "Set-Location -Path \"C:\\Program Files\\Cloudbase Solutions\\Cloudbase-Init\\conf\"",

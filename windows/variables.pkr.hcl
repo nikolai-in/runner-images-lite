@@ -102,3 +102,38 @@ variable "perform_windows_updates" {
   default     = true
   description = "Whether to perform Windows updates during build"
 }
+
+variable "agent_tools_directory" {
+  type    = string
+  default = "C:\\hostedtoolcache\\windows"
+}
+
+variable "image_folder" {
+  type    = string
+  default = "C:\\image"
+}
+
+variable "image_os" {
+  type    = string
+  default = "win19" // keep this as win19 for now
+}
+
+variable "image_version" {
+  type    = string
+  default = "dev"
+}
+
+variable "imagedata_file" {
+  type    = string
+  default = "C:\\imagedata.json"
+}
+
+variable "temp_dir" {
+  type    = string
+  default = "C:\\temp"
+}
+
+variable "helper_script_folder" {
+  type    = string
+  default = "C:\\Program Files\\WindowsPowerShell\\Modules\\"
+}
