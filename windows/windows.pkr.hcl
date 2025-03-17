@@ -171,7 +171,7 @@ build {
   provisioner "powershell" {
     elevated_password = "${var.winrm_password}"
     elevated_user     = "${var.winrm_user}"
-    scripts           = ["${path.root}/scripts/build/Install-NET48.ps1"]
+    scripts           = ["${path.root}/assets/scripts/build/Install-NET48.ps1"]
     valid_exit_codes  = [0, 3010]
   }
 
@@ -183,15 +183,15 @@ build {
     environment_vars = ["IMAGE_VERSION=${var.image_version}", "IMAGE_OS=${var.image_os}", "AGENT_TOOLSDIRECTORY=${var.agent_tools_directory}", "IMAGEDATA_FILE=${var.imagedata_file}", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     execution_policy = "unrestricted"
     scripts = [
-      "${path.root}/scripts/build/Configure-WindowsDefender.ps1",
-      "${path.root}/scripts/build/Configure-PowerShell.ps1",
-      "${path.root}/scripts/build/Install-PowerShellModules.ps1",
-      "${path.root}/scripts/build/Install-WindowsFeatures.ps1",
-      "${path.root}/scripts/build/Install-Chocolatey.ps1",
-      "${path.root}/scripts/build/Configure-BaseImage.ps1",
-      "${path.root}/scripts/build/Configure-ImageDataFile.ps1",
-      "${path.root}/scripts/build/Configure-SystemEnvironment.ps1",
-      "${path.root}/scripts/build/Configure-DotnetSecureChannel.ps1"
+      "${path.root}/assets/scripts/build/Configure-WindowsDefender.ps1",
+      "${path.root}/assets/scripts/build/Configure-PowerShell.ps1",
+      "${path.root}/assets/scripts/build/Install-PowerShellModules.ps1",
+      "${path.root}/assets/scripts/build/Install-WindowsFeatures.ps1",
+      "${path.root}/assets/scripts/build/Install-Chocolatey.ps1",
+      "${path.root}/assets/scripts/build/Configure-BaseImage.ps1",
+      "${path.root}/assets/scripts/build/Configure-ImageDataFile.ps1",
+      "${path.root}/assets/scripts/build/Configure-SystemEnvironment.ps1",
+      "${path.root}/assets/scripts/build/Configure-DotnetSecureChannel.ps1"
     ]
   }
 
@@ -206,14 +206,14 @@ build {
   provisioner "powershell" {
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     scripts = [
-      "${path.root}/scripts/build/Install-VCRedist.ps1",
-      "${path.root}/scripts/build/Install-Docker.ps1",
-      "${path.root}/scripts/build/Install-DockerWinCred.ps1",
-      "${path.root}/scripts/build/Install-DockerCompose.ps1",
-      "${path.root}/scripts/build/Install-PowershellCore.ps1",
-      "${path.root}/scripts/build/Install-WebPlatformInstaller.ps1",
-      "${path.root}/scripts/build/Install-Runner.ps1",
-      "${path.root}/scripts/build/Install-TortoiseSvn.ps1"
+      "${path.root}/assets/scripts/build/Install-VCRedist.ps1",
+      "${path.root}/assets/scripts/build/Install-Docker.ps1",
+      "${path.root}/assets/scripts/build/Install-DockerWinCred.ps1",
+      "${path.root}/assets/scripts/build/Install-DockerCompose.ps1",
+      "${path.root}/assets/scripts/build/Install-PowershellCore.ps1",
+      "${path.root}/assets/scripts/build/Install-WebPlatformInstaller.ps1",
+      "${path.root}/assets/scripts/build/Install-Runner.ps1",
+      "${path.root}/assets/scripts/build/Install-TortoiseSvn.ps1"
     ]
   }
 
@@ -226,9 +226,9 @@ build {
     elevated_user     = "${var.winrm_user}"
     environment_vars  = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     scripts = [
-      "${path.root}/scripts/build/Install-VisualStudio.ps1",
-      "${path.root}/scripts/build/Install-KubernetesTools.ps1",
-      "${path.root}/scripts/build/Install-NET48-devpack.ps1"
+      "${path.root}/assets/scripts/build/Install-VisualStudio.ps1",
+      "${path.root}/assets/scripts/build/Install-KubernetesTools.ps1",
+      "${path.root}/assets/scripts/build/Install-NET48-devpack.ps1"
     ]
     valid_exit_codes = [0, 3010]
   }
@@ -236,22 +236,22 @@ build {
   provisioner "powershell" {
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     scripts = [
-      "${path.root}/scripts/build/Install-Wix.ps1",
-      "${path.root}/scripts/build/Install-WDK.ps1",
-      "${path.root}/scripts/build/Install-VSExtensions.ps1",
-      # "${path.root}/scripts/build/Install-AzureCli.ps1",
-      # "${path.root}/scripts/build/Install-AzureDevOpsCli.ps1",
-      "${path.root}/scripts/build/Install-ChocolateyPackages.ps1",
-      "${path.root}/scripts/build/Install-JavaTools.ps1",
-      "${path.root}/scripts/build/Install-Kotlin.ps1",
-      "${path.root}/scripts/build/Install-OpenSSL.ps1"
+      "${path.root}/assets/scripts/build/Install-Wix.ps1",
+      "${path.root}/assets/scripts/build/Install-WDK.ps1",
+      "${path.root}/assets/scripts/build/Install-VSExtensions.ps1",
+      # "${path.root}/assets/scripts/build/Install-AzureCli.ps1",
+      # "${path.root}/assets/scripts/build/Install-AzureDevOpsCli.ps1",
+      "${path.root}/assets/scripts/build/Install-ChocolateyPackages.ps1",
+      "${path.root}/assets/scripts/build/Install-JavaTools.ps1",
+      "${path.root}/assets/scripts/build/Install-Kotlin.ps1",
+      "${path.root}/assets/scripts/build/Install-OpenSSL.ps1"
     ]
   }
 
   provisioner "powershell" {
     execution_policy = "remotesigned"
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
-    scripts          = ["${path.root}/scripts/build/Install-ServiceFabricSDK.ps1"]
+    scripts          = ["${path.root}/assets/scripts/build/Install-ServiceFabricSDK.ps1"]
   }
 
   provisioner "windows-restart" {
@@ -265,60 +265,60 @@ build {
   provisioner "powershell" {
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     scripts = [
-      "${path.root}/scripts/build/Install-ActionsCache.ps1",
-      "${path.root}/scripts/build/Install-Ruby.ps1",
-      "${path.root}/scripts/build/Install-PyPy.ps1",
-      "${path.root}/scripts/build/Install-Toolset.ps1",
-      "${path.root}/scripts/build/Configure-Toolset.ps1",
-      "${path.root}/scripts/build/Install-NodeJS.ps1",
-      "${path.root}/scripts/build/Install-AndroidSDK.ps1",
-      "${path.root}/scripts/build/Install-PowershellAzModules.ps1",
-      "${path.root}/scripts/build/Install-Pipx.ps1",
-      "${path.root}/scripts/build/Install-Git.ps1",
-      "${path.root}/scripts/build/Install-GitHub-CLI.ps1",
-      "${path.root}/scripts/build/Install-PHP.ps1",
-      "${path.root}/scripts/build/Install-Rust.ps1",
-      "${path.root}/scripts/build/Install-Sbt.ps1",
-      "${path.root}/scripts/build/Install-Chrome.ps1",
-      "${path.root}/scripts/build/Install-EdgeDriver.ps1",
-      "${path.root}/scripts/build/Install-Firefox.ps1",
-      "${path.root}/scripts/build/Install-Selenium.ps1",
-      "${path.root}/scripts/build/Install-IEWebDriver.ps1",
-      "${path.root}/scripts/build/Install-Apache.ps1",
-      "${path.root}/scripts/build/Install-Nginx.ps1",
-      "${path.root}/scripts/build/Install-Msys2.ps1",
-      "${path.root}/scripts/build/Install-WinAppDriver.ps1",
-      "${path.root}/scripts/build/Install-R.ps1",
-      "${path.root}/scripts/build/Install-AWSTools.ps1",
-      "${path.root}/scripts/build/Install-DACFx.ps1",
-      "${path.root}/scripts/build/Install-MysqlCli.ps1",
-      "${path.root}/scripts/build/Install-SQLPowerShellTools.ps1",
-      "${path.root}/scripts/build/Install-SQLOLEDBDriver.ps1",
-      "${path.root}/scripts/build/Install-DotnetSDK.ps1",
-      # "${path.root}/scripts/build/Install-Mingw64.ps1",
-      "${path.root}/scripts/build/Install-Haskell.ps1",
-      "${path.root}/scripts/build/Install-Stack.ps1",
-      "${path.root}/scripts/build/Install-Miniconda.ps1",
-      # "${path.root}/scripts/build/Install-AzureCosmosDbEmulator.ps1",
-      "${path.root}/scripts/build/Install-Mercurial.ps1",
-      "${path.root}/scripts/build/Install-Zstd.ps1",
-      "${path.root}/scripts/build/Install-NSIS.ps1",
-      # "${path.root}/scripts/build/Install-CloudFoundryCli.ps1",
-      "${path.root}/scripts/build/Install-Vcpkg.ps1",
-      "${path.root}/scripts/build/Install-PostgreSQL.ps1",
-      "${path.root}/scripts/build/Install-Bazel.ps1",
-      # "${path.root}/scripts/build/Install-AliyunCli.ps1",
-      "${path.root}/scripts/build/Install-RootCA.ps1",
-      # "${path.root}/scripts/build/Install-MongoDB.ps1",
-      # "${path.root}/scripts/build/Install-GoogleCloudCLI.ps1",
-      "${path.root}/scripts/build/Install-CodeQLBundle.ps1",
-      "${path.root}/scripts/build/Install-BizTalkBuildComponent.ps1",
-      "${path.root}/scripts/build/Configure-Diagnostics.ps1",
-      "${path.root}/scripts/build/Configure-DynamicPort.ps1",
-      "${path.root}/scripts/build/Configure-GDIProcessHandleQuota.ps1",
-      "${path.root}/scripts/build/Configure-Shell.ps1",
-      "${path.root}/scripts/build/Configure-DeveloperMode.ps1",
-      "${path.root}/scripts/build/Install-LLVM.ps1"
+      "${path.root}/assets/scripts/build/Install-ActionsCache.ps1",
+      "${path.root}/assets/scripts/build/Install-Ruby.ps1",
+      "${path.root}/assets/scripts/build/Install-PyPy.ps1",
+      "${path.root}/assets/scripts/build/Install-Toolset.ps1",
+      "${path.root}/assets/scripts/build/Configure-Toolset.ps1",
+      "${path.root}/assets/scripts/build/Install-NodeJS.ps1",
+      "${path.root}/assets/scripts/build/Install-AndroidSDK.ps1",
+      "${path.root}/assets/scripts/build/Install-PowershellAzModules.ps1",
+      "${path.root}/assets/scripts/build/Install-Pipx.ps1",
+      "${path.root}/assets/scripts/build/Install-Git.ps1",
+      "${path.root}/assets/scripts/build/Install-GitHub-CLI.ps1",
+      "${path.root}/assets/scripts/build/Install-PHP.ps1",
+      "${path.root}/assets/scripts/build/Install-Rust.ps1",
+      "${path.root}/assets/scripts/build/Install-Sbt.ps1",
+      "${path.root}/assets/scripts/build/Install-Chrome.ps1",
+      "${path.root}/assets/scripts/build/Install-EdgeDriver.ps1",
+      "${path.root}/assets/scripts/build/Install-Firefox.ps1",
+      "${path.root}/assets/scripts/build/Install-Selenium.ps1",
+      "${path.root}/assets/scripts/build/Install-IEWebDriver.ps1",
+      "${path.root}/assets/scripts/build/Install-Apache.ps1",
+      "${path.root}/assets/scripts/build/Install-Nginx.ps1",
+      "${path.root}/assets/scripts/build/Install-Msys2.ps1",
+      "${path.root}/assets/scripts/build/Install-WinAppDriver.ps1",
+      "${path.root}/assets/scripts/build/Install-R.ps1",
+      "${path.root}/assets/scripts/build/Install-AWSTools.ps1",
+      "${path.root}/assets/scripts/build/Install-DACFx.ps1",
+      "${path.root}/assets/scripts/build/Install-MysqlCli.ps1",
+      "${path.root}/assets/scripts/build/Install-SQLPowerShellTools.ps1",
+      "${path.root}/assets/scripts/build/Install-SQLOLEDBDriver.ps1",
+      "${path.root}/assets/scripts/build/Install-DotnetSDK.ps1",
+      # "${path.root}/assets/scripts/build/Install-Mingw64.ps1",
+      "${path.root}/assets/scripts/build/Install-Haskell.ps1",
+      "${path.root}/assets/scripts/build/Install-Stack.ps1",
+      "${path.root}/assets/scripts/build/Install-Miniconda.ps1",
+      # "${path.root}/assets/scripts/build/Install-AzureCosmosDbEmulator.ps1",
+      "${path.root}/assets/scripts/build/Install-Mercurial.ps1",
+      "${path.root}/assets/scripts/build/Install-Zstd.ps1",
+      "${path.root}/assets/scripts/build/Install-NSIS.ps1",
+      # "${path.root}/assets/scripts/build/Install-CloudFoundryCli.ps1",
+      "${path.root}/assets/scripts/build/Install-Vcpkg.ps1",
+      "${path.root}/assets/scripts/build/Install-PostgreSQL.ps1",
+      "${path.root}/assets/scripts/build/Install-Bazel.ps1",
+      # "${path.root}/assets/scripts/build/Install-AliyunCli.ps1",
+      "${path.root}/assets/scripts/build/Install-RootCA.ps1",
+      # "${path.root}/assets/scripts/build/Install-MongoDB.ps1",
+      # "${path.root}/assets/scripts/build/Install-GoogleCloudCLI.ps1",
+      "${path.root}/assets/scripts/build/Install-CodeQLBundle.ps1",
+      "${path.root}/assets/scripts/build/Install-BizTalkBuildComponent.ps1",
+      "${path.root}/assets/scripts/build/Configure-Diagnostics.ps1",
+      "${path.root}/assets/scripts/build/Configure-DynamicPort.ps1",
+      "${path.root}/assets/scripts/build/Configure-GDIProcessHandleQuota.ps1",
+      "${path.root}/assets/scripts/build/Configure-Shell.ps1",
+      "${path.root}/assets/scripts/build/Configure-DeveloperMode.ps1",
+      "${path.root}/assets/scripts/build/Install-LLVM.ps1"
     ]
   }
 
@@ -332,17 +332,17 @@ build {
     pause_before     = "2m0s"
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     scripts = [
-      "${path.root}/scripts/build/Install-WindowsUpdatesAfterReboot.ps1",
-      "${path.root}/scripts/build/Invoke-Cleanup.ps1"
+      "${path.root}/assets/scripts/build/Install-WindowsUpdatesAfterReboot.ps1",
+      "${path.root}/assets/scripts/build/Invoke-Cleanup.ps1"
     ]
   }
 
   provisioner "powershell" {
     environment_vars = ["winrm_user=${var.winrm_user}"]
     scripts = [
-      "${path.root}/scripts/build/Install-NativeImages.ps1",
-      "${path.root}/scripts/build/Configure-System.ps1",
-      "${path.root}/scripts/build/Configure-User.ps1"
+      "${path.root}/assets/scripts/build/Install-NativeImages.ps1",
+      "${path.root}/assets/scripts/build/Configure-System.ps1",
+      "${path.root}/assets/scripts/build/Configure-User.ps1"
     ]
     skip_clean = true
   }
