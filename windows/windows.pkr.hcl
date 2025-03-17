@@ -42,7 +42,7 @@ source "proxmox-iso" "windows" {
   additional_iso_files {
     cd_files = ["./assets/drivers/*", "./assets/scripts/ConfigureRemotingForAnsible.ps1", "./assets/software/virtio-win-guest-tools.exe"]
     cd_content = {
-      "autounattend.xml" = templatefile("./assets/templates/unattend.pkrtpl", { password = var.winrm_password, cdrom_drive = var.cdrom_drive })
+      "autounattend.xml" = templatefile("./build_files/templates/unattend.pkrtpl", { password = var.winrm_password, cdrom_drive = var.cdrom_drive, index = lookup(var.image_index, var.template, "core") })
     }
     cd_label         = "Unattend"
     iso_storage_pool = var.iso_storage
@@ -51,7 +51,7 @@ source "proxmox-iso" "windows" {
     index            = 0
   }
 
-  template_name           = "templ-win-runner"
+  template_name           = "templ-win19-runner-${var.template}"
   template_description    = "Created on: ${timestamp()}"
   vm_name                 = "win-runner"
   memory                  = var.memory
@@ -132,6 +132,22 @@ build {
     ]
   }
 
+  // Try to fix some warnings
+  provisioner "powershell" {
+    elevated_password = "${var.winrm_password}"
+    elevated_user     = "${var.winrm_user}"
+    inline = [
+      "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process -Force",
+      "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force",
+      "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine -Force",
+      "$ProfileDir = Split-Path $PROFILE -Parent",
+      "if (-not (Test-Path $ProfileDir)) { New-Item -Path $ProfileDir -ItemType Directory -Force }",
+      "if (Test-Path $PROFILE) { Remove-Item -Path $PROFILE -Force }",
+      "Set-Content -Path $PROFILE -Value '# PowerShell Profile' -Force",
+      "Write-Output 'PowerShell profile has been created with execution policy set to RemoteSigned'"
+    ]
+  }
+
   // Begin runner template
   provisioner "powershell" {
     inline = [
@@ -172,13 +188,6 @@ build {
     elevated_password = "${var.winrm_password}"
     elevated_user     = "${var.winrm_user}"
     scripts           = ["${path.root}/assets/scripts/build/Install-NET48.ps1"]
-    valid_exit_codes  = [0, 3010]
-  }
-
-  provisioner "powershell" {
-    elevated_password = "${var.winrm_password}"
-    elevated_user     = "${var.winrm_user}"
-    scripts           = ["${path.root}/assets/scripts/build/Install-RSAT.ps1"]
     valid_exit_codes  = [0, 3010]
   }
 
