@@ -111,12 +111,6 @@ variable "cdrom_drive" {
   default     = "D:"
 }
 
-variable "perform_windows_updates" {
-  type        = bool
-  default     = true
-  description = "Whether to perform Windows updates during build"
-}
-
 variable "agent_tools_directory" {
   type    = string
   default = "C:\\hostedtoolcache\\windows"
@@ -129,7 +123,7 @@ variable "image_folder" {
 
 variable "image_os" {
   type    = string
-  default = "win19" // keep this as win19 for now
+  default = "win19"
 }
 
 variable "image_version" {

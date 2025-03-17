@@ -111,8 +111,6 @@ build {
       "exclude:$_.Title -like '*Preview*'",
       "include:$true",
     ]
-    # This will only run when perform_windows_updates is true
-    only = var.perform_windows_updates ? ["proxmox-iso.windows"] : [""]
   }
 
   provisioner "powershell" {
@@ -305,7 +303,7 @@ build {
       "${path.root}/assets/scripts/build/Install-Msys2.ps1",
       "${path.root}/assets/scripts/build/Install-WinAppDriver.ps1",
       "${path.root}/assets/scripts/build/Install-R.ps1",
-      "${path.root}/assets/scripts/build/Install-AWSTools.ps1",
+      # "${path.root}/assets/scripts/build/Install-AWSTools.ps1",
       "${path.root}/assets/scripts/build/Install-DACFx.ps1",
       "${path.root}/assets/scripts/build/Install-MysqlCli.ps1",
       "${path.root}/assets/scripts/build/Install-SQLPowerShellTools.ps1",
