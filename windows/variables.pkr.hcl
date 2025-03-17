@@ -138,7 +138,7 @@ variable "imagedata_file" {
 
 variable "temp_dir" {
   type    = string
-  default = "C:\\temp"
+  default = "C:\\Users\\Administrator\\AppData\\Local\\Temp\\"
 }
 
 variable "helper_script_folder" {
