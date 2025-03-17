@@ -175,6 +175,13 @@ build {
     valid_exit_codes  = [0, 3010]
   }
 
+  provisioner "powershell" {
+    elevated_password = "${var.winrm_password}"
+    elevated_user     = "${var.winrm_user}"
+    scripts           = ["${path.root}/assets/scripts/build/Install-RSAT.ps1"]
+    valid_exit_codes  = [0, 3010]
+  }
+
   provisioner "windows-restart" {
     restart_timeout = "10m"
   }
