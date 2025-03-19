@@ -73,19 +73,18 @@ variable "vlan" {
 
 variable "template" {
   type        = string
-  default     = "full"
-  description = "Template type, can be desktop or core"
+  default     = "standard"
+  description = "Template type, can be standard or datacenter"
   validation {
-    condition     = (var.template == "desktop") || (var.template == "core") || (var.template == "full") || (var.template == "datacenter")
-    error_message = "Should be desktop, core, full, or datacenter."
+    condition     = (var.template == "standard") || (var.template == "datacenter")
+    error_message = "Should be standard or datacenter."
   }
 }
 
 variable "image_index" {
   type = map(string)
   default = {
-    "core"       = "Windows Server 2022 SERVERSTANDARDCORE"
-    "full"       = "Windows Server 2022 SERVERSTANDARD"
+    "standard"   = "Windows Server 2022 SERVERSTANDARD"
     "datacenter" = "Windows Server 2022 SERVERDATACENTER"
   }
 }
