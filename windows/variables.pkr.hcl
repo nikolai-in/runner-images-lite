@@ -76,8 +76,8 @@ variable "template" {
   default     = "full"
   description = "Template type, can be desktop or core"
   validation {
-    condition     = (var.template == "desktop") || (var.template == "core")
-    error_message = "Should be desktop or core."
+    condition     = (var.template == "desktop") || (var.template == "core") || (var.template == "full") || (var.template == "datacenter")
+    error_message = "Should be desktop, core, full, or datacenter."
   }
 }
 
