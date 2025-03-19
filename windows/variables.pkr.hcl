@@ -73,7 +73,7 @@ variable "vlan" {
 
 variable "template" {
   type        = string
-  default     = "desktop"
+  default     = "full"
   description = "Template type, can be desktop or core"
   validation {
     condition     = (var.template == "desktop") || (var.template == "core")
@@ -83,11 +83,17 @@ variable "template" {
 
 variable "image_index" {
   type = map(string)
+  default = {
+    "core"       = "Windows Server 2022 SERVERSTANDARDCORE"
+    "full"       = "Windows Server 2022 SERVERSTANDARD"
+    "datacenter" = "Windows Server 2022 SERVERDATACENTER"
+  }
 }
 
 variable "bridge" {
   type        = string
   description = "Network bridge name"
+  default     = "vmbr0"
 }
 
 variable "disk_storage" {
@@ -98,6 +104,7 @@ variable "disk_storage" {
 variable "disk_size_gb" {
   type        = string
   description = " Disk size including GB so <size>GB"
+  default     = "80G"
 }
 
 variable "winrm_user" {
@@ -123,7 +130,7 @@ variable "image_folder" {
 
 variable "image_os" {
   type    = string
-  default = "win19"
+  default = "win22"
 }
 
 variable "image_version" {

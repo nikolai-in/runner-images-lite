@@ -51,7 +51,7 @@ source "proxmox-iso" "windows" {
     index            = 0
   }
 
-  template_name           = "templ-win19-runner-${var.template}"
+  template_name           = "templ-win22-runner-${var.template}"
   template_description    = "Created on: ${timestamp()}"
   vm_name                 = "win-runner"
   memory                  = var.memory
@@ -173,7 +173,7 @@ build {
       "Move-Item '${var.image_folder}\\scripts\\tests\\Helpers.psm1' '${var.helper_script_folder}\\TestsHelpers\\TestsHelpers.psm1'",
       "Move-Item '${var.image_folder}\\scripts\\tests' '${var.image_folder}\\tests'",
       "Remove-Item -Recurse '${var.image_folder}\\scripts'",
-      "Move-Item '${var.image_folder}\\toolsets\\toolset-2019.json' '${var.image_folder}\\toolset.json'",
+      "Move-Item '${var.image_folder}\\toolsets\\toolset-2022.json' '${var.image_folder}\\toolset.json'",
       "Remove-Item -Recurse '${var.image_folder}\\toolsets'"
     ]
   }
@@ -244,7 +244,7 @@ build {
       "${path.root}/assets/scripts/build/Install-KubernetesTools.ps1",
       "${path.root}/assets/scripts/build/Install-NET48-devpack.ps1"
     ]
-    valid_exit_codes = [0, 3010]
+    valid_exit_codes = [0, 1603, 3010]
   }
 
   provisioner "powershell" {
@@ -260,6 +260,7 @@ build {
       "${path.root}/assets/scripts/build/Install-Kotlin.ps1",
       "${path.root}/assets/scripts/build/Install-OpenSSL.ps1"
     ]
+    valid_exit_codes = [0, 1603, 3010]
   }
 
   provisioner "powershell" {
@@ -274,6 +275,10 @@ build {
 
   provisioner "windows-shell" {
     inline = ["wmic product where \"name like '%%microsoft azure powershell%%'\" call uninstall /nointeractive"]
+  }
+
+  provisioner "windows-shell" {
+    inline = ["winget install Microsoft.Edge --accept-source-agreements --accept-package-agreements --silent"]
   }
 
   provisioner "powershell" {
@@ -309,7 +314,7 @@ build {
       "${path.root}/assets/scripts/build/Install-SQLPowerShellTools.ps1",
       "${path.root}/assets/scripts/build/Install-SQLOLEDBDriver.ps1",
       "${path.root}/assets/scripts/build/Install-DotnetSDK.ps1",
-      # "${path.root}/assets/scripts/build/Install-Mingw64.ps1",
+      "${path.root}/assets/scripts/build/Install-Mingw64.ps1",
       "${path.root}/assets/scripts/build/Install-Haskell.ps1",
       "${path.root}/assets/scripts/build/Install-Stack.ps1",
       "${path.root}/assets/scripts/build/Install-Miniconda.ps1",
@@ -342,6 +347,7 @@ build {
     restart_timeout       = "30m"
   }
 
+  // Final provisioning steps - you can add the optional test scripts if needed
   provisioner "powershell" {
     pause_before     = "2m0s"
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
