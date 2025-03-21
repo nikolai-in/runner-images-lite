@@ -150,7 +150,11 @@ build {
   provisioner "powershell" {
     inline = [
       "New-Item -Path ${var.image_folder} -ItemType Directory -Force",
-      "New-Item -Path ${var.temp_dir} -ItemType Directory -Force"
+      "New-Item -Path ${var.temp_dir} -ItemType Directory -Force",
+      "# Clean up any existing files from previous runs",
+      "if (Test-Path '${var.image_folder}\\assets') { Remove-Item -Recurse -Force '${var.image_folder}\\assets' }",
+      "if (Test-Path '${var.image_folder}\\scripts') { Remove-Item -Recurse -Force '${var.image_folder}\\scripts' }",
+      "if (Test-Path '${var.image_folder}\\toolsets') { Remove-Item -Recurse -Force '${var.image_folder}\\toolsets' }"
     ]
   }
 
@@ -165,16 +169,38 @@ build {
 
   provisioner "powershell" {
     inline = [
-      "Move-Item '${var.image_folder}\\assets\\post-gen' 'C:\\post-generation'",
-      "Remove-Item -Recurse '${var.image_folder}\\assets'",
-      "Move-Item '${var.image_folder}\\scripts\\docs-gen' '${var.image_folder}\\SoftwareReport'",
-      "Move-Item '${var.image_folder}\\scripts\\helpers' '${var.helper_script_folder}\\ImageHelpers'",
-      "New-Item -Type Directory -Path '${var.helper_script_folder}\\TestsHelpers\\'",
-      "Move-Item '${var.image_folder}\\scripts\\tests\\Helpers.psm1' '${var.helper_script_folder}\\TestsHelpers\\TestsHelpers.psm1'",
-      "Move-Item '${var.image_folder}\\scripts\\tests' '${var.image_folder}\\tests'",
-      "Remove-Item -Recurse '${var.image_folder}\\scripts'",
-      "Move-Item '${var.image_folder}\\toolsets\\toolset-2022.json' '${var.image_folder}\\toolset.json'",
-      "Remove-Item -Recurse '${var.image_folder}\\toolsets'"
+      "# Handle post-gen directory",
+      "if (Test-Path 'C:\\post-generation') { Remove-Item -Recurse -Force 'C:\\post-generation' }",
+      "if (Test-Path '${var.image_folder}\\assets\\post-gen') { Move-Item -Force '${var.image_folder}\\assets\\post-gen' 'C:\\post-generation' }",
+
+      "# Clean up assets directory",
+      "if (Test-Path '${var.image_folder}\\assets') { Remove-Item -Recurse -Force '${var.image_folder}\\assets' }",
+
+      "# Handle SoftwareReport directory",
+      "if (Test-Path '${var.image_folder}\\SoftwareReport') { Remove-Item -Recurse -Force '${var.image_folder}\\SoftwareReport' }",
+      "if (Test-Path '${var.image_folder}\\scripts\\docs-gen') { Move-Item -Force '${var.image_folder}\\scripts\\docs-gen' '${var.image_folder}\\SoftwareReport' }",
+
+      "# Handle ImageHelpers directory",
+      "if (Test-Path '${var.helper_script_folder}\\ImageHelpers') { Remove-Item -Recurse -Force '${var.helper_script_folder}\\ImageHelpers' }",
+      "if (Test-Path '${var.image_folder}\\scripts\\helpers') { Move-Item -Force '${var.image_folder}\\scripts\\helpers' '${var.helper_script_folder}\\ImageHelpers' }",
+
+      "# Handle TestsHelpers directory",
+      "New-Item -Type Directory -Path '${var.helper_script_folder}\\TestsHelpers\\' -Force",
+      "if (Test-Path '${var.image_folder}\\scripts\\tests\\Helpers.psm1') { Move-Item -Force '${var.image_folder}\\scripts\\tests\\Helpers.psm1' '${var.helper_script_folder}\\TestsHelpers\\TestsHelpers.psm1' }",
+
+      "# Handle tests directory",
+      "if (Test-Path '${var.image_folder}\\tests') { Remove-Item -Recurse -Force '${var.image_folder}\\tests' }",
+      "if (Test-Path '${var.image_folder}\\scripts\\tests') { Move-Item -Force '${var.image_folder}\\scripts\\tests' '${var.image_folder}\\tests' }",
+
+      "# Clean up scripts directory",
+      "if (Test-Path '${var.image_folder}\\scripts') { Remove-Item -Recurse -Force '${var.image_folder}\\scripts' }",
+
+      "# Handle toolset.json",
+      "if (Test-Path '${var.image_folder}\\toolset.json') { Remove-Item -Force '${var.image_folder}\\toolset.json' }",
+      "if (Test-Path '${var.image_folder}\\toolsets\\toolset-2022.json') { Move-Item -Force '${var.image_folder}\\toolsets\\toolset-2022.json' '${var.image_folder}\\toolset.json' }",
+
+      "# Clean up toolsets directory",
+      "if (Test-Path '${var.image_folder}\\toolsets') { Remove-Item -Recurse -Force '${var.image_folder}\\toolsets' }"
     ]
   }
 
@@ -210,7 +236,9 @@ build {
   }
 
   provisioner "windows-restart" {
-    restart_timeout = "30m"
+    check_registry        = true
+    restart_check_command = "powershell -command \"& {while ( (Get-WindowsOptionalFeature -Online -FeatureName Containers -ErrorAction SilentlyContinue).State -ne 'Enabled' ) { Start-Sleep 30; Write-Output 'InProgress' }}\""
+    restart_timeout       = "10m"
   }
 
   provisioner "powershell" {
@@ -220,7 +248,6 @@ build {
   provisioner "powershell" {
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     scripts = [
-      "${path.root}/assets/scripts/build/Install-VCRedist.ps1",
       "${path.root}/assets/scripts/build/Install-Docker.ps1",
       "${path.root}/assets/scripts/build/Install-DockerWinCred.ps1",
       "${path.root}/assets/scripts/build/Install-DockerCompose.ps1",
@@ -242,9 +269,13 @@ build {
     scripts = [
       "${path.root}/assets/scripts/build/Install-VisualStudio.ps1",
       "${path.root}/assets/scripts/build/Install-KubernetesTools.ps1",
-      "${path.root}/assets/scripts/build/Install-NET48-devpack.ps1"
     ]
     valid_exit_codes = [0, 1603, 3010]
+  }
+
+  provisioner "windows-restart" {
+    check_registry  = true
+    restart_timeout = "10m"
   }
 
   provisioner "powershell" {
@@ -275,10 +306,6 @@ build {
 
   provisioner "windows-shell" {
     inline = ["wmic product where \"name like '%%microsoft azure powershell%%'\" call uninstall /nointeractive"]
-  }
-
-  provisioner "windows-shell" {
-    inline = ["winget install Microsoft.Edge --accept-source-agreements --accept-package-agreements --silent"]
   }
 
   provisioner "powershell" {
@@ -322,7 +349,6 @@ build {
       "${path.root}/assets/scripts/build/Install-Mercurial.ps1",
       "${path.root}/assets/scripts/build/Install-Zstd.ps1",
       "${path.root}/assets/scripts/build/Install-NSIS.ps1",
-      # "${path.root}/assets/scripts/build/Install-CloudFoundryCli.ps1",
       "${path.root}/assets/scripts/build/Install-Vcpkg.ps1",
       "${path.root}/assets/scripts/build/Install-PostgreSQL.ps1",
       "${path.root}/assets/scripts/build/Install-Bazel.ps1",
